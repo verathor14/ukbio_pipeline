@@ -1,0 +1,415 @@
+---
+title: "Pipeline Step 4 - Alcohol"
+output:
+  html_document:
+    df_print: paged
+---
+
+Process the alcohol variables
+Add anything missing to the missing report
+```{r}
+library(dplyr) # Run install.packages("tidyverse") to get this
+library(tidyr) # Run install.packages("tidyr") to get this
+library(ggplot2)
+library("reshape") # Run install.packages("reshape") to get this
+library("broom")
+library(kableExtra) # Run install.packages("kableExtra")
+
+```
+
+
+Set the filepath to get input files
+```{r}
+# Home computer
+input_path <- "file_path"
+
+```
+
+Set the filepath to save outputs to
+```{r}
+# Home computer
+output_path <- "file_path"
+
+```
+
+Set the date the IDP names table script was run
+```{r}
+
+run_date <- "yyyy-mm-dd"
+
+```
+
+
+Load the filtered eid and missing_report
+```{r}
+
+load(paste0(output_path, "filtered_eid_p2_", run_date, ".RData"))
+load(paste0(output_path, "missing_report_p2_", run_date, ".RData"))
+
+```
+
+Load the imaging and baseline alcohol files
+```{r}
+
+baseline <- read.csv(paste0(input_path, "alcohol_baseline.csv"))
+baseline <- filter(baseline, n_eid %in% filtered_eid)
+names(baseline) <- names(baseline) %>%
+gsub("_0_0", "", .) %>%
+gsub("_2_0", "", .)
+
+imaging <- read.csv(paste0(input_path, "alcohol_imaging.csv"))
+imaging <- filter(imaging, n_eid %in% filtered_eid)
+names(imaging) <- names(imaging) %>%
+gsub("_0_0", "", .) %>%
+gsub("_2_0", "", .)
+
+```
+
+
+Calculate number of drinks per week and drinks per drinking day
+UK Bio has the number of drinks split by drink type (ex. red wine, beer)
+3/14/22 Used to have month dose as the output, fixed this to week dose
+
+The data fields representing estimated number of drinks use data coding 100291
+Valid responses are positive numbers representing drinks
+-1 = Do not know
+-3 = Prefer not to answer
+https://biobank.ndph.ox.ac.uk/showcase/coding.cgi?id=100291
+
+```{r}
+
+imaging %>%
+  # Make a column to indicate monthly or weekly frequency
+  mutate(week_month = case_when(
+    is.na(n_1558) ~ "missing",
+    n_1558 == -3 ~ "missing",
+    n_1558 <= 3 ~ "week",
+    n_1558 < 6 ~ "month",
+    n_1558 == 6 ~ "never",
+    TRUE ~ "missing")) %>%
+  mutate(n_drinks = NA) %>%
+  
+  # Convert any strings to numeric
+  mutate_at(vars(n_1568, n_1578, n_1588, n_1598, n_1608, n_5364), ~as.numeric(.x)) %>%
+  
+  # Change any special (-1, -3) values to NA
+  mutate_at(vars(n_1568, n_1578, n_1588, n_1598, n_1608, n_5364), ~ifelse(.x < 0, NA, .x)) %>%
+  
+  filter(n_1568 < 0)
+
+
+```
+
+
+
+
+```{r}
+
+imaging <- imaging %>%
+  # Make a column to indicate monthly or weekly frequency
+  mutate(week_month = case_when(
+    is.na(n_1558) ~ "missing",
+    n_1558 == -3 ~ "missing",
+    n_1558 <= 3 ~ "week",
+    n_1558 < 6 ~ "month",
+    n_1558 == 6 ~ "never",
+    TRUE ~ "missing")) %>%
+  mutate(n_drinks = NA) %>%
+  
+  # MONTHLY
+  # Convert any strings to numeric
+  mutate_at(vars(n_4407, n_4418, n_4429, n_4440, n_4451, n_4462), ~as.numeric(.x)) %>%
+  
+  # Change any special (-1, -3) values to NA
+  mutate_at(vars(n_4407, n_4418, n_4429, n_4440, n_4451, n_4462), ~ifelse(.x < 0, NA, .x)) %>%
+  
+  rowwise() %>%
+  # Add all the different drink types
+  mutate(n_drinks = ifelse(week_month == "month",
+    sum(n_4407, n_4418, n_4429, n_4440, n_4451, n_4462, na.rm = TRUE), n_drinks)) %>%
+  ungroup() %>%
+  # If all categories were NA, put NA back as the sum (it gets turned to 0 by na.rm = TRUE)
+  mutate(n_drinks = ifelse(week_month == "month",
+                           ifelse(is.na(n_4407) & is.na(n_4418) & is.na(n_4429) & is.na(n_4440)
+                             & is.na(n_4451) & is.na(n_4462), NA, n_drinks), n_drinks)) %>%
+  
+  # WEEKLY
+  # Convert any strings to numeric
+  mutate_at(vars(n_1568, n_1578, n_1588, n_1598, n_1608, n_5364), ~as.numeric(.x)) %>%
+  
+  # Change any special (-1, -3) values to NA
+  mutate_at(vars(n_1568, n_1578, n_1588, n_1598, n_1608, n_5364), ~ifelse(.x < 0, NA, .x)) %>%
+  
+  rowwise() %>%
+  mutate(n_drinks = ifelse(week_month == "week",
+    sum(n_1568, n_1578, n_1588, n_1598, n_1608, n_5364, na.rm = TRUE), n_drinks)) %>%
+  ungroup() %>%
+  # If all categories were NA, put NA back as the sum (it gets turned to 0 by na.rm = TRUE)
+  mutate(n_drinks = ifelse(week_month == "week",
+                           ifelse(is.na(n_1568) & is.na(n_1578) & is.na(n_1588) & is.na(n_1598)
+                             & is.na(n_1608) & is.na(n_5364), NA, n_drinks), n_drinks)) %>%
+  
+  # Assign never drinkers to 0 drinks
+  mutate(n_drinks = ifelse(week_month == "never", 0, n_drinks)) %>%
+  
+  # Convert n_drinks into drinks per week
+  mutate(week_drinks = ifelse(week_month == "month", n_drinks / 4.34, n_drinks)) %>% # 4.34 weeks per month
+  
+  # Convert data field 1558 into drinking days per month
+  mutate(drink_freq = case_when(
+    n_1558 == 1 ~ 30.4, # Average number of days in a month
+    n_1558 == 2 ~ 3.5 * 4.3, # Average days per week * average # weeks in a month
+    n_1558 == 3 ~ 1.5 * 4.3, # Average days per week * average # weeks in a month
+    n_1558 == 4 ~ 2, # Average times per month
+    n_1558 == 5 ~ 0.5, # Less than monthly
+    n_1558 == 6 ~ 0))
+  
+
+```
+
+Repeat on the baseline alcohol data
+
+```{r}
+
+baseline <- baseline %>%
+  # Make a column to indicate monthly or weekly frequency
+  mutate(week_month = case_when(
+    is.na(n_1558) ~ "missing",
+    n_1558 == -3 ~ "missing",
+    n_1558 <= 3 ~ "week",
+    n_1558 < 6 ~ "month",
+    n_1558 == 6 ~ "never",
+    TRUE ~ "missing")) %>%
+  mutate(n_drinks = NA) %>%
+  
+  # Monthly
+  # Convert any strings to numeric
+  mutate_at(vars(n_4407, n_4418, n_4429, n_4440, n_4451, n_4462), ~as.numeric(.x)) %>%
+  
+  # Change any special (-1, -3) values to NA
+  mutate_at(vars(n_4407, n_4418, n_4429, n_4440, n_4451, n_4462), ~ifelse(.x < 0, NA, .x)) %>%
+  
+  rowwise() %>%
+  # Add all the different drink types
+  mutate(n_drinks = ifelse(week_month == "month",
+    sum(n_4407, n_4418, n_4429, n_4440, n_4451, n_4462, na.rm = TRUE), n_drinks)) %>%
+  ungroup() %>%
+  # If all categories were NA, put NA back as the sum (it gets turned to 0 by na.rm = TRUE)
+  mutate(n_drinks = ifelse(week_month == "month",
+                           ifelse(is.na(n_4407) & is.na(n_4418) & is.na(n_4429) & is.na(n_4440)
+                             & is.na(n_4451) & is.na(n_4462), NA, n_drinks), n_drinks)) %>%
+  
+  # WEEKLY
+  # Convert any strings to numeric
+  mutate_at(vars(n_1568, n_1578, n_1588, n_1598, n_1608, n_5364), ~as.numeric(.x)) %>%
+  
+  # Change any special (-1, -3) values to NA
+  mutate_at(vars(n_1568, n_1578, n_1588, n_1598, n_1608, n_5364), ~ifelse(.x < 0, NA, .x)) %>%
+
+  rowwise() %>%
+  mutate(n_drinks = ifelse(week_month == "week",
+    sum(n_1568, n_1578, n_1588, n_1598, n_1608, n_5364, na.rm = TRUE), n_drinks)) %>%
+  ungroup() %>%
+  # If all categories were NA, put NA back as the sum (it gets turned to 0 by na.rm = TRUE)
+  mutate(n_drinks = ifelse(week_month == "week",
+                           ifelse(is.na(n_1568) & is.na(n_1578) & is.na(n_1588) & is.na(n_1598)
+                             & is.na(n_1608) & is.na(n_5364), NA, n_drinks), n_drinks)) %>%
+  
+  # Assign never drinkers to 0 drinks
+  mutate(n_drinks = ifelse(week_month == "never", 0, n_drinks)) %>%
+  
+  # Convert n_drinks into drinks per week
+  mutate(week_drinks = ifelse(week_month == "month", n_drinks / 4.34, n_drinks)) %>% # 4.34 weeks per month
+  
+  # Convert data field 1558 into drinking days per month
+  mutate(drink_freq = case_when(
+    n_1558 == 1 ~ 30.4, # Average number of days in a month
+    n_1558 == 2 ~ 3.5 * 4.3, # Average days per week * average # weeks in a month
+    n_1558 == 3 ~ 1.5 * 4.3, # Average days per week * average # weeks in a month
+    n_1558 == 4 ~ 2, # Average times per month
+    n_1558 == 5 ~ 0.5, # Less than monthly
+    n_1558 == 6 ~ 0))
+  
+
+```
+
+
+Make a column to reflect people who are true never drinkers vs. former drinkers
+Data Field 3731 Former alcohol drinker (UKB doesn't always use person first language)
+1 = Yes
+0 = No
+-3 = Prefer not to answer
+```{r}
+
+imaging <- imaging %>%
+  mutate(never_alcohol = case_when(
+    week_month == "week" ~ 0,
+    week_month == "month" ~ 0,
+    week_month == "never" ~ ifelse(n_3731 == 0, 1, 0))) # True never consumed alcohol
+    # "missing" from 1558 will be NA
+    # -3 from 3731 is False for never consumed alcohol, we just don't know so err on conservative side
+
+baseline <- baseline %>%
+  mutate(never_alcohol = case_when(
+    week_month == "week" ~ 0,
+    week_month == "month" ~ 0,
+    week_month == "never" ~ ifelse(n_3731 == 0, 1, 0))) # True never consumed alcohol
+    # "missing" from 1558 will be NA
+
+
+```
+
+Within no-drinking, also capture how many are current, former, or truly never
+Data-Field 3731, Former alcohol drinker, asked only of those who indicated "Never" in data field 1558
+
+Data-Coding 100352
+1 = Yes
+2 = No
+-3 = Prefer not to answer
+
+```{r}
+
+imaging <- imaging %>%
+  mutate(alcohol_status = NA) %>%
+  mutate(alcohol_status = case_when(
+    week_month == "week" ~ "Current",
+    week_month == "month" ~ "Current",
+    week_month == "never" ~ ifelse(n_3731 == 0, "Never", "Former")))
+    # "missing" from 1558 will be NA
+    # -3 from 3731 is False for never consumed alcohol, we just don't know so err on conservative side
+
+baseline <- baseline %>%
+  mutate(alcohol_status = NA) %>%
+  mutate(alcohol_status = case_when(
+    week_month == "week" ~ "Current",
+    week_month == "month" ~ "Current",
+    week_month == "never" ~ ifelse(n_3731 == 0, "Never", "Former")))
+    # "missing" from 1558 will be NA
+    # -3 from 3731 is False for never consfumed alcohol, we just don't know so err on conservative side
+
+
+```
+
+
+Check that the pattern of drink freq, non-drinker, and alcohol status make sense
+```{r}
+
+imaging %>%
+  group_by(drink_freq, never_alcohol, alcohol_status) %>%
+  tally()
+
+```
+
+Set up a missing report to capture how much data is missing before and after replacement
+```{r}
+
+missing_report <- rbind(missing_report, data.frame("step" = rep("Before"),
+                             "data_field" = c("drink_frequency", "week_drinks", "never_alcohol", "alcohol_status"),
+                             "n_missing" = c(sum(is.na(imaging$drink_freq)),
+                                             sum(is.na(imaging$week_drinks)),
+                                             sum(is.na(imaging$never_alcohol)),
+                                             sum(is.na(imaging$alcohol_status)))))
+
+```
+
+
+Where the imaging visit alcohol data is missing values, replace with the baseline visit
+
+```{r}
+
+baseline <- baseline %>%
+  dplyr::rename("baseline_drink_freq" = drink_freq,
+                "baseline_week_drinks" = week_drinks,
+                "baseline_never_alcohol" = never_alcohol,
+                "baseline_alcohol_status" = alcohol_status)
+
+imaging <- imaging %>%
+  left_join(baseline, by = "n_eid") %>%
+  mutate(drink_freq = ifelse(is.na(drink_freq), baseline_drink_freq, drink_freq)) %>%
+  mutate(week_drinks = ifelse(is.na(week_drinks), baseline_week_drinks, week_drinks)) %>%
+  mutate(never_alcohol = ifelse(is.na(never_alcohol), baseline_never_alcohol, never_alcohol)) %>%
+  mutate(alcohol_status = ifelse(is.na(alcohol_status), baseline_alcohol_status, alcohol_status))
+
+```
+
+Capture the number missing after the replacement step
+
+```{r}
+
+missing_report <- rbind(missing_report, data.frame("step" = rep("After"),
+                             "data_field" = c("drink_frequency", "week_drinks", "never_alcohol", "alcohol_status"),
+                             "n_missing" = c(sum(is.na(imaging$drink_freq)),
+                                             sum(is.na(imaging$week_drinks)),
+                                             sum(is.na(imaging$never_alcohol)),
+                                             sum(is.na(imaging$alcohol_status)))))
+
+```
+
+
+```{r}
+
+missing_report %>%
+  mutate(percent_missing = n_missing / nrow(imaging) * 100) %>%
+  mutate(percent_missing = formatC(percent_missing, digits = 1, format = "f")) %>%
+  kable(caption = paste0("Missing values in Imaging Visit Alcohol Data Before and After Replacement from Baseline (N=",
+                         nrow(imaging), ")")) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+
+```
+
+
+Rename and select to just the essential alcohol columns
+```{r}
+
+imaging_alcohol <- imaging %>%
+  select(n_eid, drink_freq, week_drinks, never_alcohol, alcohol_status)
+
+rm(baseline)
+rm(imaging)
+
+```
+
+Check range and distribution to ensure it makes sense
+```{r}
+
+imaging_alcohol %>%
+  select(c(week_drinks, drink_freq)) %>%
+  summarise_all(funs(mean, sd, min, max), na.rm = TRUE) %>%
+  pivot_longer(cols = everything(), names_to = "name", values_to = "value") %>%
+  mutate(measure = case_when(
+    grepl("_mean", name) ~ "mean",
+    grepl("_sd", name) ~ "sd",
+    grepl("_min", name) ~ "min",
+    grepl("_max", name) ~ "max")) %>%
+  mutate(name = gsub("_mean", "", name)) %>%
+  mutate(name = gsub("_sd", "", name)) %>%
+  mutate(name = gsub("_min", "", name)) %>%
+  mutate(name = gsub("_max", "", name)) %>%
+  pivot_wider(id_cols = name, names_from = measure, values_from = value) %>%
+  mutate(mean = formatC(mean, digits = 2, format = "f")) %>%
+  mutate(sd = formatC(sd, digits = 2, format = "f"))  %>%
+  mutate(min = formatC(min, digits = 2, format = "f"))  %>%
+  mutate(max = formatC(max, digits = 2, format = "f"))  %>%
+  kable(caption = paste0("Mean, SD, Min, and Max in Alcohol Covariates (N=",
+                         nrow(imaging_alcohol), ")")) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+  
+  
+```
+
+Save the alcohol variables and missing report
+```{r}
+
+save(imaging_alcohol, file = paste0(output_path, "imaging_alcohol_", Sys.Date(), ".RData"))
+save(missing_report, file = paste0(output_path, "missing_report_p4_", Sys.Date(), ".RData"))
+
+```
+
+
+```{r}
+
+print(paste0("Script last run ", Sys.Date()))
+
+```
+
+

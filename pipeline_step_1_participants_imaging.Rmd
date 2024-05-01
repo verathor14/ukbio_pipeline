@@ -1,0 +1,895 @@
+---
+title: "Pipeline Step 1 - Filter participants and import imaging data"
+output:
+  html_document:
+    df_print: paged
+---
+
+In this script the imaging data (as IDPs) is imported and participants are filtered for inclusion in the analysis.
+Participants are excluded for:
+Not being matched to a pheno ID
+Indicated they want to withdraw from a study
+Have a neurological diagnosis which could affect their imaging
+Are a 3rd degree or closer relative of someone else in the study (which one out of a relative pair is retained is random)
+
+Not all participants have all MRI sequences, so the IDPs are split by sequence and participants are dropped from the set if they are missing the sequence.
+
+```{r}
+library(dplyr) # Run install.packages("tidyverse") to get this
+library(tidyr) # Run install.packages("tidyr") to get this
+library(ggplot2)
+library("reshape") # Run install.packages("reshape") to get this
+library(kableExtra) # Run install.packages("kableExtra")
+library(viridis)
+library(forcats)
+
+```
+
+Set the filepath to get input files
+```{r}
+# Home computer
+input_path <- "file_path"
+
+```
+
+Set the filepath to save outputs to
+```{r}
+# Home computer
+output_path <- "file_path"
+
+```
+
+Set the date the IDP names table script was run
+```{r}
+
+run_date <- "yyyy-mm-dd"
+
+```
+
+
+Initialize a table to track N as the data set is processed
+```{r}
+
+n_tracker <- data.frame(matrix(ncol = 3, nrow = 0))
+colnames(n_tracker) <- c("Step", "MRI", "N")
+
+```
+
+Import the file of IDPs
+
+```{r}
+
+ukbio_IDP <- read.csv(file = paste0(input_path, "my_UKB_IDP_data.csv"))
+
+```
+
+Capture n in the full imaging set
+```{r}
+
+n_tracker <- rbind(n_tracker, data.frame("Step" = "Imaging cohort", "MRI" = "All", "N" = nrow(ukbio_IDP)))
+
+```
+
+Stitch in the rfMRI ICAs (also have the imaging ID)
+```{r}
+
+rfMRI_ICA <- read.table(file = paste0(input_path, "subs_netica.txt"), sep = ",", header = FALSE)
+
+# Do some renaming, the first column is the subject IDs
+rfMRI_ICA <- rfMRI_ICA %>%
+  dplyr::rename("eid" = V1, "ICA1" = V2, "ICA2" = V3, "ICA3" = V4, "ICA4" = V5, "ICA5" = V6, "ICA6" = V7)
+
+```
+
+```{r}
+
+ukbio_IDP <- left_join(ukbio_IDP, rfMRI_ICA, by = "eid")
+
+```
+
+
+Replace the imaging eid with the phenotype eid so they will match all the way through
+
+The column entitled ukb47267_ID_1 contains the IDs present in the imaging set.
+The column ukb48123_ID_1 is the IDs in the phenotype set.
+
+```{r}
+
+ID_key <- read.table(file = paste0(input_path, "/ID_key_for_my_UKB.txt"), sep = " ", header = TRUE)
+
+ID_key <- dplyr::rename(ID_key, pheno_eid = ukb48123_ID_1, eid = ukb47267_ID_1)
+
+```
+
+Now join these columns into the imaging data over ukb47267_ID_1 (eid)
+```{r}
+ukbio_IDP <- right_join(ID_key, ukbio_IDP, by = "eid")
+
+```
+
+
+Filter out the patients who are missing an eid - we cannot match them to the phenotypes
+```{r}
+
+ukbio_IDP <- ukbio_IDP %>%
+  filter(! is.na(pheno_eid))
+
+```
+
+
+Update the n tracker
+```{r}
+
+n_tracker <- rbind(n_tracker, data.frame("Step" = "Matched phenotype eid", "MRI" = "All", "N" = nrow(ukbio_IDP)))
+
+```
+
+Remove the imaging eid (no longer needed) and rename the pheno_eid so it will match the phenotyping and covariates
+
+```{r}
+
+ukbio_IDP <- ukbio_IDP %>%
+  select(! eid) %>%
+  dplyr::rename("n_eid" = "pheno_eid")
+
+```
+
+Filter out withdrawn participants
+```{r}
+
+withdrawn_ID <- read.csv(paste0(input_path, "UKB_withdrawn.csv"))
+ukbio_IDP <- ukbio_IDP %>%
+  filter(! ukbio_IDP$n_eid %in% withdrawn_ID$X1038692)
+
+```
+
+Save the n
+```{r}
+
+n_tracker <- rbind(n_tracker, data.frame("Step" = "Withdrawn removed", "MRI" = "All", "N" = nrow(ukbio_IDP)))
+
+```
+
+
+================Remove participants with neurological disease===========================================
+
+4/29/22 Had been using strategy of removing all participants with any IDP an outlier by >4 SD
+Checked this against known neuro disease, it only catches 30% of participants with known disease
+While also removing 30% of the sample
+Decided to simply use the diagnosis codes from data field 20002 to filter out participants and leave the outliers alone
+
+Assess how many participants are >4 SD outliers, and how many have a neurological disease diagnosis
+
+6/15/23 Include the disease list from both baseline and imaging appointments, they are different
+Participants filtered out if the disease is reported at any appointment
+
+```{r}
+
+disease_baseline <- read.csv(paste0(input_path, "disease_baseline_6_13_23.csv"))
+disease_imaging <- read.csv(paste0(input_path, "disease_imaging_6_13_23.csv"))
+
+```
+
+These data fields include all disease codes, although we are using them to filter for neurological disease only
+
+Combine baseline and imaging, filter for only the people in our imaging cohort
+```{r}
+
+all_disease <- disease_baseline %>%
+  left_join(disease_imaging, by = "n_eid") %>%
+  filter(n_eid %in% ukbio_IDP$n_eid)
+
+```
+
+
+Make a list of codes for neurological diseases that might impact brain structure
+I referenced the Palmer paper, will need to verify against UK Biobank and also confirm we agree with this list
+Dementia = 1263
+Parkinsons = 1262
+Chronic degenerative neurological = 1258
+Guillan-Barre syndrome = 1256
+Multiple sclerosis = 1261
+Other demyelinating disease = 1397
+Stroke or ischaemic stroke = 1081
+Brain cancer = 1032
+Brain hemorrhage = 1491
+Brain / intracranial abcess = 1245
+Cerebral aneurysm = 1425
+Cerebral palsy = 1433
+Encephalitis = 1246
+Epilepsy = 1264
+Head injury = 1266
+Nervous system infection = 1244
+Ischaemic stroke = 1583
+Meningeal cancer = 1031
+Meningioma = 1659
+Meningitis = 1247
+Motor neuron disease = 1259
+Neurological disease / trauma = 1240
+Spina bifida = 1524
+Subdural hematoma = 1083
+Subarachnoid hemorrhage = 1086
+Transient ischemic attack = 1082
+
+
+```{r}
+
+neuro_codes <- data.frame((rbind(
+  c("Dementia", 1263),
+  c("Parkinsons", 1262),
+  c("Chronic degenerative neurological", 1258),
+  c("Guillan-Barre syndrome", 1256),
+  c("Multiple sclerosis", 1261),
+  c("Other demyelinating disease", 1397),
+  c("Stroke or ischaemic stroke", 1081),
+  c("Brain cancer", 1032),
+  c("Brain hemorrhage", 1491),
+  c("Brain / intracranial abscess", 1245),
+  c("Cerebral aneurysm", 1425),
+  c("Cerebral palsy", 1433),
+  c("Encephalitis", 1246),
+  c("Epilepsy", 1264),
+  c("Head injury", 1266),
+  c("Nervous system infection", 1244),
+  c("Ischaemic stroke", 1583),
+  c("Meningeal cancer", 1031),
+  c("Meningioma", 1659),
+  c("Meningitis", 1247),
+  c("Motor neuron disease", 1259),
+  c("Neurological disease / trauma", 1240),
+  c("Spina bifida", 1524),
+  c("Subdural hematoma", 1083),
+  c("Subarachnoid hemorrhage", 1086),
+  c("Transient ischemic attack", 1082))))
+
+neuro_codes <- neuro_codes %>%
+  dplyr::rename("condition" = X1, "code" = X2) %>%
+  mutate(code = formatC(code, format = "d"))
+
+```
+
+Use the table of neuro codes to construct a table for neuro disease
+```{r}
+
+neuro_disease <- all_disease %>%
+  pivot_longer(cols = -n_eid, names_to = "field", values_to = "code") %>%
+  select(-field) %>%
+  filter(! is.na(code)) %>%
+  # Remove any duplicates due to data from both the baseline and imaging visits
+  distinct(.keep_all = TRUE) %>%
+  mutate(code = formatC(code, format = "d")) %>%
+  filter(code %in% neuro_codes$code) %>%
+  left_join(neuro_codes, by = "code")
+
+```
+
+Use the table to tally up how many total individuals are affected, and which diseases
+
+```{r}
+
+neuro_disease_table <- neuro_disease %>%
+  group_by(condition) %>%
+  tally() %>%
+  left_join(neuro_codes, by = "condition") %>%
+  relocate(code, .before = n) %>%
+  mutate(percent = n / nrow(ukbio_IDP) * 100) %>%
+  mutate(percent = formatC(percent, digits = 2, format = "f")) %>%
+  arrange(desc(n))
+
+neuro_disease_table %>%
+  kable(caption = paste0("Prevalence of neurological conditions in Imaging cohort\nN=",
+                         nrow(ukbio_IDP), ", N affected=", length(unique(neuro_disease$n_eid)))) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+
+```
+
+Save the neuro disease table, it will go in the supplemental info
+```{r}
+
+save(neuro_disease_table, file = paste0(output_path, "neuro_disease_table_", Sys.Date(), ".RData"))
+
+```
+
+
+Use the eids in the neuro_disease table to filter out participants with a diagnosis of neurological disease
+
+```{r}
+
+ukbio_IDP <- ukbio_IDP %>%
+  filter(! n_eid %in% neuro_disease$n_eid)
+
+```
+
+Update the N tracker
+
+```{r}
+
+n_tracker <- rbind(n_tracker, data.frame("Step" = "Neuro diagnosis removed", "MRI" = "All", "N" = nrow(ukbio_IDP)))
+
+```
+
+Filter for relatedness=============================================================================
+
+Import the relatedness matrix
+Got this from the database - it was uploaded by Louis
+```{r}
+
+relatedness <- read.delim(file = paste0(input_path, "ukb48123_rel_s488285.dat"), header = TRUE, sep=" ")
+
+```
+
+Per Bycroft 2018 Supplemental Info, 1st degree relatives have an expected kinship coefficient of 1/4
+2nd degree = 1/8
+3rd degree = 1/16
+Set the minimum kinship coefficient to 1/16th and then filter the relationship matrix for 1/6 or greater
+This is a stochastic probability so I set it slightly under 1/16th to capture these
+
+The ukbtools function to accomplish this sets a larger cutoff for related-ness
+
+```{r}
+
+kinship_coeff = 1/20
+
+relatedness <- relatedness %>%
+  filter(Kinship > kinship_coeff)
+
+```
+
+This reduces the number of entries in the kinship matrix down to 92825
+
+Filter again for eid in the imaging set
+We only care about pairs where both are in the imaging data
+When one member of a pair did not, happy day no conflict!
+
+```{r}
+
+relatedness <- relatedness %>%
+  filter(relatedness$ID1 %in% ukbio_IDP$n_eid)
+
+relatedness <- relatedness %>%
+  filter(relatedness$ID2 %in% ukbio_IDP$n_eid)
+
+```
+
+886 pairs of 3rd degree or closer relatives in the imaging set
+
+For selecting which members to retain, I am implementing the algorithm used in the ukbiotools package by Ken Hanscombe
+Description of the algorithm:
+1) Remove pairs with kinship coefficient less than 3rd degree (already done)
+2) Count number of connections each participant has, add the one with the most connections to "samples to exclude"
+  - accomplish this with a while loop
+3) Repeat step 2 until all participants have only 1 connection, then randomly select one member of the pairs to add to "samples to exclude"
+
+
+```{r}
+
+keep_list = c()
+remove_list = c()
+
+done = FALSE
+while (! done) {
+remove_ID <- relatedness %>%
+  select(ID1, ID2) %>%
+  pivot_longer(everything(), names_to = "colname", values_to = "ID") %>%
+  group_by(ID) %>%
+  tally() %>%
+  arrange(desc(n)) %>%
+  utils::head(n = 1)
+
+if (remove_ID$n > 1) {
+  # Add the highly connected ID to the remove list
+  remove_list <- append(remove_list, remove_ID$ID)
+  
+  # Filter the highly connected ID out of the relationship matrix
+  relatedness <- relatedness %>%
+    filter(! (ID1 == remove_ID$ID)) %>%
+    filter(! (ID2 == remove_ID$ID))
+}  else {
+  done = TRUE
+}
+}
+
+```
+
+All highly connected eIDs are now removed.
+Randomly assign the remaining IDs to remove
+```{r}
+
+for (i in 1:nrow(relatedness)) {
+  if (i %% 2 == 1) {
+    remove_list <- append(remove_list, relatedness[i,]$ID1)
+  } else
+    remove_list <- append(remove_list, relatedness[i,]$ID2)
+}
+
+```
+
+Use the remove list to filter the imaging set
+
+```{r}
+
+ukbio_IDP <- ukbio_IDP %>%
+  filter(! ukbio_IDP$n_eid %in% remove_list)
+
+```
+
+Save the n after filtering
+```{r}
+
+n_tracker <- rbind(n_tracker, data.frame("Step" = "Related removed", "MRI" = "All", "N" = nrow(ukbio_IDP)))
+
+```
+
+
+======Handle missing data in the imaging IDPs and normalize================================================
+
+Import the IDP names file to allow exploring the IDPs by MRI type, etc.
+```{r}
+
+load(paste0(output_path, "IDP_names_table_", run_date, ".RData"))
+
+```
+
+Grab the ukbio_IDP column names to get a list of the IDPs present in the data set
+```{r}
+
+IDP_all_names <- colnames(ukbio_IDP)
+IDP_all_names <- IDP_all_names[IDP_all_names != "n_eid"]
+
+```
+
+Filter the names table to match the IDPs in our UK Bio imaging data set
+4/28/22 modified pipeline step 0 to include the ICAs
+```{r}
+
+IDP_name_table <- IDP_name_table %>%
+  filter(IDP_name_table$IDP %in% IDP_all_names)
+
+```
+
+
+Remove the QC IDPs, we are not analyzing these
+```{r}
+
+IDP_name_table <- IDP_name_table %>%
+  filter(! MRI == "QC") %>%
+  # MRI == "resting_functional" are QC related to rfMRI
+  filter(! MRI == "resting_functional")
+
+```
+
+
+Save the filtered list as IDP_all_names
+```{r}
+
+IDP_all_names <- IDP_name_table %>%
+  pull(IDP)
+
+```
+
+Use IDP_all_names to remove the L1, L2, and L2 dMRI measures from the main imaging set
+Also removing tfMRI (task functional)
+```{r}
+
+ukbio_IDP <- ukbio_IDP %>%
+  select(c(n_eid, all_of(IDP_all_names)))
+
+```
+
+6/16/23 there are 1903 IDPs
+
+
+Create a table to display the number missing and how that compares as a percentage of the total data
+```{r}
+
+image_missing <- ukbio_IDP %>%
+  summarise_at(vars(all_of(IDP_all_names)), ~ sum(is.na(.x))) %>%
+  pivot_longer(cols = everything(), names_to = "IDP", values_to = "n_missing") %>%
+  mutate(percent_missing = n_missing / nrow(ukbio_IDP) * 100) %>%
+  left_join(IDP_name_table, by = "IDP")
+  
+```
+
+Plot the percent missing by MRI type
+
+```{r}
+
+image_missing %>%
+  mutate(MRI = ifelse(MRI == "T1", ifelse(map == "global" | map == "FIRST", "T1 global / FIRST",
+                                          ifelse(map == "FAST", "T1 FAST", "T1 regional")), MRI)) %>%
+  mutate(MRI = fct_reorder(MRI, -percent_missing)) %>%
+  ggplot(aes(x = reorder(IDP, -percent_missing), y = percent_missing, color = MRI)) +
+  geom_point() +
+  ggtitle(paste0("Missing values per IDP as Percent of N (N=", nrow(ukbio_IDP), ")")) +
+  xlab(paste0("IDP (IDPs =", nrow(image_missing), ")")) +
+  ylab("Percent of observations") +
+  ylim(c(0, 8))
+
+```
+
+Group by MRI type and display % missing
+
+```{r}
+
+image_missing %>%
+  mutate(MRI = ifelse(IDP == "X25781.2.0", "total_hyperintensities", MRI)) %>%
+  group_by(MRI, map) %>%
+  summarise(percent_missing = mean(percent_missing)) %>%
+  arrange(desc(percent_missing)) %>%
+  mutate(percent_missing = formatC(percent_missing, digits = 3, format = "f")) %>%
+  kable(caption = paste0("Missing values per MRI Category as Percent of N (N=", nrow(ukbio_IDP), ")")) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+  
+
+```
+
+
+Participants who are missing all values for a given MRI category should not be included in normalization / regression for that category
+Break the imaging data up based on category
+
+Some participants are missing brain volume, they cannot be included in any subsets
+```{r}
+
+ukbio_IDP <- ukbio_IDP %>%
+  filter(! is.na(X25009.2.0))
+
+```
+
+Break the rest of the IDPs into subsets
+Define the total volume IDPs (also used for controlling reginal IDPs) so they do not get included in regional subsets (this causes errors)
+25001	Volume of peripheral cortical grey matter (normalised for head size)	T1 structural brain MRI  
+25003	Volume of ventricular cerebrospinal fluid (normalised for head size)	T1 structural brain MRI  
+25005	Volume of grey matter (normalised for head size)	T1 structural brain MRI  
+25007	Volume of white matter (normalised for head size)	T1 structural brain MRI  
+25009	Volume of brain, grey+white matter (normalised for head size)	T1 structural brain MRI  
+26514	Volume of BrainSeg (whole brain)	Freesurfer ASEG  
+26518	Volume of TotalGray (whole brain)	Freesurfer ASEG  
+26527	Volume of CSF (whole brain)	Freesurfer ASEG  
+26528	Volume of WM-hypointensities (whole brain)	Freesurfer ASEG  
+26553	Volume of CerebralWhiteMatter (left hemisphere)	Freesurfer ASEG  
+26584	Volume of CerebralWhiteMatter (right hemisphere)	Freesurfer ASEG  
+26755	Mean thickness of GlobalMeanMean thickness (left hemisphere)	Freesurfer desikan white  
+26856	Mean thickness of GlobalMeanMean thickness (right hemisphere)	Freesurfer desikan white
+
+Add additional total measures from ASEG 11/10/23
+26517 Volume of SubCortGray (whole brain) - subcortical grey matter
+26583 Volume of Cortex (right hemisphere)
+26552 Volume of Cortex (left hemisphere)
+
+Also including IDP derived measures
+```{r}
+
+total_volume_IDPs <- c("X25001.2.0", "X25003.2.0", "X25005.2.0", "X25007.2.0", "X25009.2.0",
+                       "X26514.2.0", "X26518.2.0", "X26527.2.0", "X26528.2.0", "X26553.2.0", "X26584.2.0",
+                       "X26755.2.0", "X26856.2.0", "X26517.2.0", "X26583.2.0", "X26552.2.0", "total_wm",
+                       "global_mean_thk", "total_cortex",
+                       "mean_FA", "mean_MD", "mean_ICVF", "mean_ISOVF", "mean_MO", "mean_OD")
+
+```
+
+
+```{r}
+
+GMV <- IDP_name_table %>%
+  filter(MRI == "T1") %>%
+  filter(map == "global" | map == "FAST" | map == "FIRST") %>%
+  filter(! IDP %in% total_volume_IDPs) %>%
+  pull(IDP)
+
+length(GMV)
+
+```
+
+```{r}
+
+free_2009 <- IDP_name_table %>%
+  filter(MRI == "T1") %>%
+  filter(map == "freesurfer_a2009s") %>%
+  filter(! IDP %in% total_volume_IDPs) %>%
+  pull(IDP)
+
+length(free_2009)
+
+```
+
+
+```{r}
+
+desikan <- IDP_name_table %>%
+  filter(MRI == "T1") %>%
+  filter(grepl("desikan", map)) %>%
+  filter(! IDP %in% total_volume_IDPs) %>%
+  pull(IDP)
+
+length(desikan)
+
+```
+
+
+```{r}
+
+T1_regional <- IDP_name_table %>%
+  filter(MRI == "T1") %>%
+  filter(! map %in% c("global", "FAST", "FIRST", "freesurfer_a2009s")) %>%
+  filter(! grepl("desikan", map)) %>%
+  filter(! IDP %in% total_volume_IDPs) %>%
+  pull(IDP)
+
+length(T1_regional)
+
+```
+
+Select T2 with the exception of total hyperintensities (X25781.2.0)
+
+```{r}
+
+T2 <- IDP_name_table %>%
+  filter(MRI == "T2") %>%
+  filter(! IDP == "X25781.2.0") %>%
+  filter(! IDP %in% total_volume_IDPs) %>%
+  pull(IDP)
+
+length(T2)
+
+```
+
+Include total hyperintensities with the dMRI measures
+It has a similar rate of missingness, so this makes sense
+Palmer 2021 groups it in this way
+
+```{r}
+
+dMRI <- IDP_name_table %>%
+  filter(MRI == "dMRI") %>%
+  filter(! IDP %in% total_volume_IDPs) %>%
+  pull(IDP)
+  #append("X25781.2.0") # Not in version from Spring 2023
+
+length(dMRI)
+
+```
+
+```{r}
+
+rfMRI <- IDP_name_table %>%
+  filter(MRI == "rfMRI") %>%
+  pull(IDP)
+
+length(rfMRI)
+
+```
+
+Check that the number of IDPs in the individual vectors matches the total
+
+```{r}
+
+print(sum(length(total_volume_IDPs), length(GMV), length(free_2009), length(desikan), length(T1_regional), length(T2), length(dMRI), length(rfMRI)))
+
+```
+Now break the imaging set into subsets based on the IDPs
+
+```{r}
+
+GMV <- ukbio_IDP %>%
+  select(c(n_eid, all_of(GMV)))
+
+free_2009 <- ukbio_IDP %>%
+  select(c(n_eid, all_of(free_2009)))
+
+desikan <- ukbio_IDP %>%
+  select(c(n_eid, all_of(desikan)))
+
+T1_regional <- ukbio_IDP %>%
+  select(c(n_eid, all_of(T1_regional)))
+
+T2 <- ukbio_IDP %>%
+  select(c(n_eid, all_of(T2)))
+
+dMRI <- ukbio_IDP %>%
+  select(c(n_eid, all_of(dMRI)))
+
+rfMRI <- ukbio_IDP %>%
+  select(c(n_eid, all_of(rfMRI)))
+
+```
+
+Filter each subset to remove participants who are missing data
+
+```{r}
+
+GMV <- na.omit(GMV)
+free_2009 <- na.omit(free_2009)
+desikan <- na.omit(desikan)
+T1_regional <- na.omit(T1_regional)
+T2 <- na.omit(T2)
+dMRI <- na.omit(dMRI)
+rfMRI <- na.omit(rfMRI)
+
+```
+
+Add rows to the N tracker
+
+```{r}
+
+MRI_types <- c("GMV", "free_2009", "desikan", "T1_regional", "T2", "dMRI", "rfMRI")
+
+n_tracker <- rbind(n_tracker, data.frame("Step" = rep("MRI missing dropped", length(MRI_types)),
+            "MRI" = MRI_types,
+           "N" = c(nrow(GMV), nrow(free_2009), nrow(desikan), nrow(T1_regional),
+                   nrow(T2), nrow(dMRI), nrow(rfMRI))))
+
+```
+
+############################## Calculate additional total measures and control measures
+
+Start a table for IDPs and IDP derived measures that are used as controls in the regression analysis
+Control columns:
+Total brain volume (25009)
+Aseg derived total brain volume (26514)
+Aseg derived brain volume not including the ventricles
+Average cortical thickness for whole brain
+Average of FA / MD / ICVF / ISOVF / OD / MO before scaling
+```{r}
+
+control_measures <- ukbio_IDP %>%
+  select(n_eid, X25009.2.0, X26514.2.0, X26515.2.0, X26755.2.0, X26856.2.0)
+
+```
+
+Get the average cortical thickness over the whole brain by averaging left and right
+
+IDPs 26755 and 26856 represent left and right "mean thickness of global mean thickness". We use them as a global variable alongside the aseg global variables
+Included with the desikan IDPs, in desikan set
+
+```{r}
+
+control_measures <- control_measures %>%
+  mutate(global_mean_thk = rowMeans(select(., X26755.2.0, X26856.2.0)))
+
+```
+
+Calculate columns of overall FA, MD, etc for each participant and add these to the control measures
+
+```{r}
+
+dMRI_means <- dMRI %>%
+  pivot_longer(cols = -n_eid, names_to = "IDP", values_to = "value") %>%
+  left_join(select(IDP_name_table, c(IDP, dMRI))) %>%
+  select(-IDP) %>%
+  group_by(n_eid, dMRI) %>%
+  summarise(across(value, ~mean(.x, na.rm = TRUE))) %>%
+  mutate(dMRI = paste0("mean_", dMRI)) %>%
+  pivot_wider(id_cols = n_eid, names_from = dMRI, values_from = value)
+
+
+```
+
+```{r}
+
+control_measures <- control_measures %>%
+  left_join(dMRI_means, by = "n_eid")
+
+```
+
+Dont run na.omit on control measures, it has controls for multiple MRI types with different levels of missingness
+The missingness in the control will match the IDPs they are used with
+
+
+############################## Make a special subset for total volumes (will not be normalized)
+Total volume IDPs
+Units of measure for all of these is mm3
+X25001
+X25003
+X25005
+X25007
+X25009
+X25781 Total volume of white matter hyperintensities (from T1 and T2_FLAIR images) MISSING in set from Spring 2023
+X26514 Volume of BrainSeg (whole brain)
+26517 Volume of SubCortGray (whole brain)
+X26528 Volume of WM-hypointensities (whole brain)
+total_wm (from X26553.2.0 + X26584.2.0)
+total_cortex (from X26552.2.0 + X26583.2.0)
+
+Select IDPs to start the table
+```{r}
+
+total_volumes <- ukbio_IDP %>%
+  select(c("n_eid", all_of(total_volume_IDPs[total_volume_IDPs %in% colnames(ukbio_IDP)]))) %>%
+  mutate(global_mean_thk = rowMeans(select(., X26755.2.0, X26856.2.0))) %>%
+  mutate(total_wm = X26553.2.0 + X26584.2.0) %>%
+  mutate(total_cortex = X26552.2.0 + X26583.2.0) %>%
+  left_join(dMRI_means, by = "n_eid") %>%
+  # scale only the dMRI means
+  mutate_at(vars(mean_FA, mean_MD, mean_ICVF, mean_ISOVF, mean_MO, mean_OD),
+            ~scale(.x, center = TRUE, scale = TRUE))
+
+```
+
+
+Don't run na.omit on the total volumes, they have different levels of missingness. Use the n from the corresponding group of regional IDPs in the N tracker
+
+############################## Scale IDPs
+
+Scale all the IDP tables
+```{r}
+
+GMV <- mutate_at(GMV, vars(-n_eid), ~scale(.x, center = TRUE, scale = TRUE))
+free_2009 <- mutate_at(free_2009, vars(-n_eid), ~scale(.x, center = TRUE, scale = TRUE))
+desikan <- mutate_at(desikan, vars(-n_eid), ~scale(.x, center = TRUE, scale = TRUE))
+T1_regional <- mutate_at(T1_regional, vars(-n_eid), ~scale(.x, center = TRUE, scale = TRUE))
+T2 <- mutate_at(T2, vars(-n_eid), ~scale(.x, center = TRUE, scale = TRUE))
+dMRI <- mutate_at(dMRI, vars(-n_eid), ~scale(.x, center = TRUE, scale = TRUE))
+rfMRI <- mutate_at(rfMRI, vars(-n_eid), ~scale(.x, center = TRUE, scale = TRUE))
+
+# Also scale the control measures
+control_measures <- mutate_at(control_measures, vars(-n_eid), ~scale(.x, center = TRUE, scale = TRUE))
+
+# Total volumes are NOT scaled (except dMRI measures), this way the output is in mm3 and more interpertable
+
+```
+
+After performing this transformation using mutate_at and scale, I checked the results for column X25011.2.0 by doing the calculation in excel. The column values match as of 9/20/21.
+12/11/21 Also checked the results for the global columns after adding these.
+
+#########Removal of outliers was here, final decision to drop this step after meeting with Janine on 5/20/22
+
+Save the filtered and normalized IDPs tables
+```{r}
+
+save(GMV, file = paste0(output_path, "GMV_", Sys.Date(), ".RData"))
+save(free_2009, file = paste0(output_path, "free_2009_", Sys.Date(), ".RData"))
+save(desikan, file = paste0(output_path, "desikan_", Sys.Date(), ".RData"))
+save(T1_regional, file = paste0(output_path, "T1_regional_", Sys.Date(), ".RData"))
+save(T2, file = paste0(output_path, "T2_", Sys.Date(), ".RData"))
+save(dMRI, file = paste0(output_path, "dMRI_", Sys.Date(), ".RData"))
+save(rfMRI, file = paste0(output_path, "rfMRI_", Sys.Date(), ".RData"))
+
+save(control_measures, file = paste0(output_path, "controls_", Sys.Date(), ".RData"))
+write.csv(control_measures, file = paste0(output_path, "controls_", Sys.Date(), ".csv")) # As .csv becuse otherwise the columns are matrices
+
+save(total_volumes, file = paste0(output_path, "total_volumes_", Sys.Date(), ".RData"))
+
+
+```
+
+
+Take the list of eid from ukbio IDP to select participants to include from imaging and non-imaging covariates
+Why ukbio and not one of the subsets?
+While some subsets (ex. GMV) have a lower rate of missing, all are missing some participants who are present in the others
+5/6/22 bug fix: do remove every participant who is missing brain volume X25009.2.0
+```{r}
+
+filtered_eid <- ukbio_IDP %>%
+  pull(n_eid)
+
+save(filtered_eid, file = paste0(output_path, paste0("filtered_eid_p1_", Sys.Date(), ".RData")))
+
+```
+
+
+Save and view the n tracker
+
+```{r}
+
+save(n_tracker, file = paste0(output_path, "n_tracker_p1_", Sys.Date(), ".RData"))
+
+n_tracker %>%
+  pivot_wider(id_cols = MRI, names_from = Step, values_from = N) %>%
+  mutate(across(everything(), ~formatC(.x, format = "d"))) %>%
+  mutate(across(everything(), ~gsub("NA", "", .x))) %>%
+  kable(caption = paste0("N Remaining by Processing Step")) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+
+
+```
+
+5/6/22 Based on this table, it appears the bug fix is working and the 4 people who are missing brain volume are being dropped
+6/28/23 No more people randomly missing total brain volume
+
+
+```{r}
+
+print(paste0("Script last run ", Sys.Date()))
+
+```
+

@@ -1,0 +1,505 @@
+---
+title: "Pipeline Step 2 - Imaging Covariates"
+output:
+  html_document:
+    df_print: paged
+---
+
+4/25/24 Use genetic sex rather than self reported sex
+
+
+2/3/22 tfMRI REMOVED. This has a high rate of missingness, and after talking with Janine it likely fairly redundant with rfMRI. Task functional is not a cornerstone of our analysis.
+Added a table to get a report on missing data each time this is run. I am still handling the missing per Alfaro Almagro and not using the procedures I set up for the non imaging covariates and alcohol data.
+
+```{r}
+library(dplyr) # Run install.packages("tidyverse") to get this
+library(tidyr) # Run install.packages("tidyr") to get this
+library(ggplot2)
+library("reshape") # Run install.packages("reshape") to get this
+library(kableExtra) # Run install.packages("kableExtra")
+```
+
+Set the filepath to get input files
+```{r}
+# Home computer
+input_path <- "file_path"
+
+```
+
+Set the filepath to save outputs to
+```{r}
+# Home computer
+output_path <- "file_path"
+
+```
+
+Set the date the IDP names table script was run
+```{r}
+
+run_date <- "yyyy-mm-dd"
+
+```
+
+
+Import the imaging covariates and fix the eid to match phenotypes
+Janine sent Yoonhoo an updated imaging covariates file for the 40k subjects in Oct 2021
+
+```{r}
+
+imaging_covariates <- read.table(file = paste0(input_path, "IDP_imaging_covariates.csv"), sep = ",", header = TRUE)
+
+```
+
+Fix the eid in the imaging covariates as well, this also does not match the phenotypes
+
+```{r}
+
+ID_key <- read.table(file = paste0(input_path, "ID_key_for_my_UKB.txt"), sep = " ", header = TRUE)
+
+ID_key <- dplyr::rename(ID_key, pheno_eid = ukb48123_ID_1, eid = ukb47267_ID_1)
+
+```
+
+Now join these columns into the imaging covariates over ukb47267_ID_1
+```{r}
+imaging_covariates <- right_join(ID_key, imaging_covariates, by = "eid")
+
+```
+
+```{r}
+imaging_covariates <- imaging_covariates %>%
+  filter(! is.na(pheno_eid))
+
+```
+
+
+Remove the imaging eid (no longer needed) and rename the pheno_eid so it will match the phenotyping and covariates
+
+```{r}
+
+imaging_covariates <- imaging_covariates %>%
+  select(! eid) %>%
+  dplyr::rename("n_eid" = "pheno_eid")
+
+```
+
+Now that the eid are fixed, can filter based on the list of eids from the first step in the pipeline (remove withdrawn participants and those who were excluded)
+
+```{r}
+
+load(paste0(output_path, "filtered_eid_p1_", run_date, ".RData"))
+load(paste0(output_path, "n_tracker_p1_", run_date, ".RData"))
+
+```
+
+
+```{r}
+
+imaging_covariates <- imaging_covariates %>%
+  filter(imaging_covariates$n_eid %in% filtered_eid)
+
+```
+
+Now process the imaging covariates so they can be used in regression
+2/3/22 tfMRI REMOVED
+
+```{r}
+
+imaging_covariates <- imaging_covariates %>%
+  dplyr::rename("sex" = "X31.0.0") %>%
+  dplyr::rename("date" = "X53.2.0") %>%
+  dplyr::rename("site" = "X54.2.0") %>%
+  dplyr::rename("age" = "X21003.2.0") %>%
+  dplyr::rename("head_size" = "X25000.2.0") %>%
+  dplyr::rename("rfMRI_motion" = "X25741.2.0")
+
+# Select the covariates to include in the analysis
+imaging_covariates <- imaging_covariates %>%
+  select(n_eid, self_report_sex, date, site, age, head_size, rfMRI_motion)
+
+```
+
+
+Convert dates to a numeric. In r this is the number of days since January 1 1970
+https://statistics.berkeley.edu/computing/faqs/dates-and-times-r
+
+```{r}
+imaging_covariates <- imaging_covariates %>%
+  mutate(date = as.Date(date)) %>%
+  mutate(date = as.numeric(date))
+
+#imaging_covariates <- imaging_covariates %>%
+#  mutate(MHQ_date = as.Date(MHQ_date)) %>%
+#  mutate(MHQ_date = as.numeric(MHQ_date))
+
+```
+
+Check the number of missing observations by imaging covariate
+```{r}
+
+imaging_covariates %>%
+  summarise_at(vars(-n_eid), ~ sum(is.na(.x))) %>%
+  pivot_longer(cols = everything(), names_to = "covariate", values_to = "n_missing") %>%
+  mutate(percent_missing = n_missing / nrow(imaging_covariates) * 100) %>%
+  kable(caption = "Missing Values in Imaging covariates") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+
+```
+4 participants are missing head size, we will need to drop them as this is a pretty important control
+
+In case this changes drop anyone who is missing age, then re-save the n_tracker
+```{r}
+
+imaging_covariates <- na.omit(imaging_covariates)
+
+n_tracker <- rbind(n_tracker, data.frame("Step" = "Drop missing imaging covariates", "N" = nrow(imaging_covariates)))
+filtered_eid <- imaging_covariates$n_eid
+
+```
+
+
+Initiate the missing report
+Set up a missing report to capture how much data is missing before backfilling and imputation
+```{r}
+
+missing_report <- data.frame("step" = rep("Before", 6),
+                             "data_field" = c("sex", "date", "site", "age", "head_size", "rfMRI_motion"),
+                             "n_missing" = c(sum(is.na(imaging_covariates$sex)),
+                                             sum(is.na(imaging_covariates$date)),
+                                             sum(is.na(imaging_covariates$site)),
+                                             sum(is.na(imaging_covariates$age)),
+                                             sum(is.na(imaging_covariates$head_size)),
+                                             sum(is.na(imaging_covariates$rfMRI_motion))))
+
+```
+
+
+Save the imaging covariates before processing to reference in other scripts
+```{r}
+save(imaging_covariates, file = paste0(output_path, "imaging_covariates_", Sys.Date(), ".RData"))
+
+```
+
+
+Before normalization, capture the median and mad of all the columns in order to de-normalize some measures later
+```{r}
+
+medians <- imaging_covariates %>%
+  summarize(across(c("date", "age", "head_size", "rfMRI_motion"), ~median(.x, na.rm = TRUE))) %>%
+  pivot_longer(everything(), names_to = "covariate", values_to = "median")
+
+mad <- imaging_covariates %>%
+  summarize(across(c("date", "age", "head_size", "rfMRI_motion"), ~mad(.x, na.rm = TRUE))) %>%
+  pivot_longer(everything(), names_to = "covariate", values_to = "mad")
+
+imaging_pre_scaling <- left_join(medians, mad, by = "covariate")
+
+```
+
+
+Scale the covariates using the median and median absolute deviation * 1.48
+Do this for all columns except sex and site
+If this is done to sex it turns into NaN and Inf
+
+```{r}
+
+imaging_covariates <- imaging_covariates %>%
+  mutate_at(c("date", "age", "head_size", "rfMRI_motion"), ~scale(.x, center = median(.x, na.rm = TRUE), scale = (mad(.x, , na.rm = TRUE) * 1.48)))
+
+```
+
+Remove outliers greater than 8
+
+```{r}
+imaging_covariates <- imaging_covariates %>%
+  mutate(date = ifelse(abs(date) > 8, NA, date)) %>%
+  mutate(age = ifelse(abs(age) > 8, NA, age)) %>%
+  mutate(head_size = ifelse(abs(head_size) > 8, NA, head_size)) %>%
+  mutate(rfMRI_motion = ifelse(abs(rfMRI_motion) > 8, NA, rfMRI_motion))
+
+```
+
+
+After removing outliers, split on site
+```{r}
+unique(imaging_covariates$site)
+```
+
+In earlier versions there were only 3 imaging sites. With the updated covariates for the 8/30/21 40k imaging set there are now 3 sites.
+
+Replace the numeric site code with a name to make it clear this is a categorical variable
+
+```{r}
+
+site1_conf <- imaging_covariates %>%
+  filter(site == "11025") %>%
+  mutate(site = "site1")
+
+site2_conf <- imaging_covariates %>%
+  filter(site == "11026") %>%
+  mutate(site = "site2")
+
+site3_conf <- imaging_covariates %>%
+  filter(site == "11027") %>%
+  mutate(site = "site3")
+
+```
+
+Replace all NA and missing with the median for the site
+
+```{r}
+
+site1_conf <- site1_conf %>%
+  mutate(date = ifelse(is.na(date), median(site1_conf$date, na.rm = TRUE), date)) %>%
+  mutate(age = ifelse(is.na(age), median(site1_conf$age, na.rm = TRUE), age)) %>%
+  mutate(head_size = ifelse(is.na(head_size), median(site1_conf$head_size, na.rm = TRUE), head_size)) %>%
+  mutate(rfMRI_motion = ifelse(is.na(rfMRI_motion), median(site1_conf$rfMRI_motion, na.rm = TRUE), rfMRI_motion))
+
+
+site2_conf <- site2_conf %>%
+  mutate(date = ifelse(is.na(date), median(site2_conf$date, na.rm = TRUE), date)) %>%
+  mutate(age = ifelse(is.na(age), median(site2_conf$age, na.rm = TRUE), age)) %>%
+  mutate(head_size = ifelse(is.na(head_size), median(site2_conf$head_size, na.rm = TRUE), head_size)) %>%
+  mutate(rfMRI_motion = ifelse(is.na(rfMRI_motion), median(site2_conf$rfMRI_motion, na.rm = TRUE), rfMRI_motion))
+
+
+site3_conf <- site3_conf %>%
+  mutate(date = ifelse(is.na(date), median(site3_conf$date, na.rm = TRUE), date)) %>%
+  mutate(age = ifelse(is.na(age), median(site3_conf$age, na.rm = TRUE), age)) %>%
+  mutate(head_size = ifelse(is.na(head_size), median(site3_conf$head_size, na.rm = TRUE), head_size)) %>%
+  mutate(rfMRI_motion = ifelse(is.na(rfMRI_motion), median(site3_conf$rfMRI_motion, na.rm = TRUE), rfMRI_motion))
+
+```
+
+
+Get the means and sd before scaling AGAIN
+For now I am taking these from site1 only, will revisit if we decide that isn't representative
+```{r}
+
+means <- site1_conf %>%
+  summarize(across(c("date", "age", "head_size", "rfMRI_motion"), ~median(.x, na.rm = TRUE))) %>%
+  pivot_longer(everything(), names_to = "covariate", values_to = "mean")
+
+sd <- site1_conf %>%
+  summarize(across(c("date", "age", "head_size", "rfMRI_motion"), ~mad(.x, na.rm = TRUE))) %>%
+  pivot_longer(everything(), names_to = "covariate", values_to = "sd")
+
+imaging_pre_scaling <- imaging_pre_scaling %>%
+  left_join(means, by = "covariate") %>%
+  left_join(sd, by = "covariate")
+
+save(imaging_pre_scaling, file = paste0(output_path, "imaging_pre_scaling_", Sys.Date(), ".RData"))
+
+```
+
+
+
+Calculate the z-scores by site so that mean is zero and sd is 1
+
+```{r}
+
+site1_conf <- site1_conf %>%
+    mutate_at(c("date", "age", "head_size", "rfMRI_motion"), ~scale(.x, center = TRUE, scale = TRUE))
+
+site2_conf <- site2_conf %>%
+  mutate_at(c("date", "age", "head_size", "rfMRI_motion"), ~scale(.x, center = TRUE, scale = TRUE))
+
+site3_conf <- site3_conf %>%
+  mutate_at(c("date", "age", "head_size", "rfMRI_motion"), ~scale(.x, center = TRUE, scale = TRUE))
+
+```
+
+
+Check that this worked as intended by taking median and sd of the head_size column
+
+```{r}
+mean(site1_conf$head_size)
+sd(site1_conf$head_size)
+
+```
+The mean is not exactly zero, but it is really, really close
+
+
+Add columns for age^2 and date^2
+The authors describe performing several other steps in the paper, but for now I am simply squaring
+
+```{r}
+
+site1_conf <- site1_conf %>%
+  mutate(age_2 = age^2) %>%
+  mutate(date_2 = date^2)
+
+site2_conf <- site2_conf %>%
+  mutate(age_2 = age^2) %>%
+  mutate(date_2 = date^2)
+
+site3_conf <- site3_conf %>%
+  mutate(age_2 = age^2) %>%
+  mutate(date_2 = date^2)
+
+```
+
+The list of covariates contains an age * sex term, how is this calculated given sex is recorded as a binary variable?
+I am making a z-score on sex and then multiplying that
+
+```{r}
+site1_conf <- site1_conf %>%
+  mutate(sex = scale(sex, center = TRUE, scale = TRUE)) %>%
+  mutate(age_sex = age * sex)
+    
+site2_conf <- site2_conf %>%
+  mutate(sex = scale(sex, center = TRUE, scale = TRUE)) %>%
+  mutate(age_sex = age * sex)
+
+site3_conf <- site3_conf %>%
+  mutate(sex = scale(sex, center = TRUE, scale = TRUE)) %>%
+  mutate(age_sex = age * sex)
+
+```
+
+
+Stitch the tables back together
+
+```{r}
+
+site1_conf <- site1_conf %>%
+  dplyr::rename("site1_sex" = "sex") %>%
+  dplyr::rename("site1_date" = "date") %>%
+  dplyr::rename("site1_date_2" = "date_2") %>%
+  dplyr::rename("site1_age" = "age") %>%
+  dplyr::rename("site1_age_2" = "age_2") %>%
+  dplyr::rename("site1_age_sex" = "age_sex") %>%
+  dplyr::rename("site1_head_size" = "head_size") %>%
+  dplyr::rename("site1_rfMRI_motion" = "rfMRI_motion")
+
+site2_conf <- site2_conf %>%
+  dplyr::rename("site2_sex" = "sex") %>%
+  dplyr::rename("site2_date" = "date") %>%
+  dplyr::rename("site2_date_2" = "date_2") %>%
+  dplyr::rename("site2_age" = "age") %>%
+  dplyr::rename("site2_age_2" = "age_2") %>%
+  dplyr::rename("site2_age_sex" = "age_sex") %>%
+  dplyr::rename("site2_head_size" = "head_size") %>%
+  dplyr::rename("site2_rfMRI_motion" = "rfMRI_motion")
+
+
+site3_conf <- site3_conf %>%
+  dplyr::rename("site3_sex" = "sex") %>%
+  dplyr::rename("site3_date" = "date") %>%
+  dplyr::rename("site3_date_2" = "date_2") %>%
+  dplyr::rename("site3_age" = "age") %>%
+  dplyr::rename("site3_age_2" = "age_2") %>%
+  dplyr::rename("site3_age_sex" = "age_sex") %>%
+  dplyr::rename("site3_head_size" = "head_size") %>%
+  dplyr::rename("site3_rfMRI_motion" = "rfMRI_motion")
+
+
+```
+
+Mutate to add columns of zeros to each table
+
+```{r}
+
+site1_conf <- site1_conf %>%
+  mutate("site2_sex" = 0) %>%
+  mutate("site2_date" = 0) %>%
+  mutate("site2_age" = 0) %>%
+  mutate("site2_date_2" = 0) %>%
+  mutate("site2_age_2" = 0) %>%
+  mutate("site2_age_sex" = 0) %>%
+  mutate("site2_head_size" = 0) %>%
+  mutate("site2_rfMRI_motion" = 0) %>%
+  mutate("site2_age_2" = 0) %>%
+  mutate("site2_date_2" = 0) %>%
+  mutate("site2_age_sex" = 0) %>%
+  mutate("site3_sex" = 0) %>%
+  mutate("site3_date" = 0) %>%
+  mutate("site3_age" = 0) %>%
+  mutate("site3_date_2" = 0) %>%
+  mutate("site3_age_2" = 0) %>%
+  mutate("site3_age_sex" = 0) %>%
+  mutate("site3_head_size" = 0) %>%
+  mutate("site3_rfMRI_motion" = 0) %>%
+  mutate("site3_age_2" = 0) %>%
+  mutate("site3_date_2" = 0) %>%
+  mutate("site3_age_sex" = 0)
+ 
+site2_conf <- site2_conf %>%
+  mutate("site1_sex" = 0) %>%
+  mutate("site1_date" = 0) %>%
+  mutate("site1_age" = 0) %>%
+  mutate("site1_date_2" = 0) %>%
+  mutate("site1_age_2" = 0) %>%
+  mutate("site1_age_sex" = 0) %>%
+  mutate("site1_head_size" = 0) %>%
+  mutate("site1_rfMRI_motion" = 0) %>%
+  mutate("site1_age_2" = 0) %>%
+  mutate("site1_date_2" = 0) %>%
+  mutate("site1_age_sex" = 0) %>%
+  mutate("site3_sex" = 0) %>%
+  mutate("site3_date" = 0) %>%
+  mutate("site3_age" = 0) %>%
+  mutate("site3_date_2" = 0) %>%
+  mutate("site3_age_2" = 0) %>%
+  mutate("site3_age_sex" = 0) %>%
+  mutate("site3_head_size" = 0) %>%
+  mutate("site3_rfMRI_motion" = 0) %>%
+  mutate("site3_age_2" = 0) %>%
+  mutate("site3_date_2" = 0) %>%
+  mutate("site3_age_sex" = 0)
+  
+  
+  site3_conf <- site3_conf %>%
+  mutate("site1_sex" = 0) %>%
+  mutate("site1_date" = 0) %>%
+  mutate("site1_age" = 0) %>%
+  mutate("site1_date_2" = 0) %>%
+  mutate("site1_age_2" = 0) %>%
+  mutate("site1_age_sex" = 0) %>%
+  mutate("site1_head_size" = 0) %>%
+  mutate("site1_rfMRI_motion" = 0) %>%
+  mutate("site1_age_2" = 0) %>%
+  mutate("site1_date_2" = 0) %>%
+  mutate("site1_age_sex" = 0) %>%
+  mutate("site2_sex" = 0) %>%
+  mutate("site2_date" = 0) %>%
+  mutate("site2_age" = 0) %>%
+  mutate("site2_date_2" = 0) %>%
+  mutate("site2_age_2" = 0) %>%
+  mutate("site2_age_sex" = 0) %>%
+  mutate("site2_head_size" = 0) %>%
+  mutate("site2_rfMRI_motion" = 0) %>%
+  mutate("site2_age_2" = 0) %>%
+  mutate("site2_date_2" = 0) %>%
+  mutate("site2_age_sex" = 0)
+
+```
+
+Merge the two site tables together
+
+```{r}
+processed_covariates <- rbind(site1_conf, site2_conf, site3_conf)
+
+```
+
+Save the processed covariates for use in regression
+
+```{r}
+
+save(processed_covariates, file = paste0(output_path, "processed_imaging_covariates_", Sys.Date(), ".RData"))
+save(filtered_eid, file = paste0(output_path, "filtered_eid_p2_", Sys.Date(), ".RData"))
+save(n_tracker, file = paste0(output_path, "n_tracker_p2_", Sys.Date(), ".RData"))
+save(missing_report, file = paste0(output_path, "missing_report_p2_", Sys.Date(), ".RData"))
+
+```
+
+
+```{r}
+
+print(paste0("Script last run ", Sys.Date()))
+
+```
+
+
+
+

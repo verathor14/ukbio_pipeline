@@ -1,0 +1,729 @@
+---
+title: "Pipeline Step 0: IDP names with identifier columns"
+---
+
+We have a file with IDPs and their human readable names. This script cleans that up and makes a tidy data table with info about each IDP which can be joined to future regression results and used for selecting IDPs.
+
+Columns created:
+IDP_name: Human readable name of what the IDP represents
+IDP: UK Biobank data field for the IDP
+numeric_IDP: just the numeric part of the IDP data field
+MRI: MRI sequence the IDP is from
+map: which parcellation scheme the IDP is part of
+dMRI: for dMRI IDPs only, which NODDI measure the IDP represents
+dimension: area, thickness, or volume (relevant for T1 IDPs)
+region: what region the IDP is in
+cortical: is the IDP cortical or subcortical
+hemisphere: right or left hemisphere (or neither)
+paired: if the IDP is part of a left / right pair, this column contains the corresponding IDP on the opposite hemisphere
+display_group: a tag useful for making manhattan plots of the IDPs
+
+
+```{r}
+library(dplyr) # Run install.packages("tidyverse") to get this
+library(tidyr) # Run install.packages("tidyr") to get this
+library(ggplot2)
+library("reshape") # Run install.packages("reshape") to get this
+library("broom")
+library(kableExtra) # Run install.packages("kableExtra")
+
+```
+
+
+Set the filepath to get input files
+```{r}
+# Home computer
+input_path <- "file_path"
+
+```
+
+Set the filepath to save outputs to
+```{r}
+# Home computer
+output_path <- "file_path"
+
+```
+
+Import the text file with the IDP names
+Why it has this specific format I am not sure.
+It is important to use read.delim instead of read.table because otherwise the hashtags break everything
+
+```{r}
+# Load IDP names
+IDP_names <- read.delim(file = paste0("IDPs_37741_names.txt"), sep = "#", header = FALSE)
+
+```
+
+This imports with 2 columns
+V1 contains the IDP identifier which will match to the imaging data
+V2 is the human legible name for the region
+
+There is a bunch of stuff along with the IDP name in the first column - strip this out
+
+Implement the string manipulations
+Had to replace [][[]] with map and pluck from the purrr package because Tidyverse
+https://stackoverflow.com/questions/55663831/how-to-index-the-first-element-of-a-list-and-apply-it-to-each-row-of-a-datafram
+
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(IDP = strsplit(IDP_names$V1, " ")) %>%
+  mutate(IDP = purrr::map(IDP, purrr::pluck, 2)) %>%
+  mutate(IDP = gsub(" ", "", paste("X", gsub("-", ".", IDP))))
+  
+```
+
+Now start creating additional columns based on info in column V2 which is human legible names
+
+Make columns to indicate which MRI modality, and then which segmentation map the IDPs are from
+UK Biobank IDP data fields are numbered, make a numeric version of the IDP names to use in sorting
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(numeric_IDP = strsplit(IDP_names$V1, " ")) %>%
+  mutate(numeric_IDP = purrr::map(numeric_IDP, purrr::pluck, 2)) %>%
+  mutate(numeric_IDP = strsplit(as.character(numeric_IDP), "-")) %>%
+  mutate(numeric_IDP = purrr::map(numeric_IDP, purrr::pluck, 1)) %>%
+  mutate(numeric_IDP = as.numeric(numeric_IDP))
+
+```
+
+Remove the V1 column since it isn't needed anymore, and also rename V2
+
+```{r}
+
+IDP_names <- IDP_names %>%
+  select(! V1) %>%
+  dplyr::rename("IDP_name" = V2)
+
+```
+
+Initialize the MRI and map columns
+
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = NA) %>%
+  mutate(map = NA)
+
+```
+
+Regional grey matter (FAST) are fields 25782 to 25920
+There are 139 IDP on the showcase, as of 9/8/21 we have all of them in this naming file
+
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP >= 25782 & numeric_IDP <= 25920, "T1", MRI)) %>%
+  mutate(map = ifelse(numeric_IDP >= 25782 & numeric_IDP <= 25920, "FAST", map))
+
+# Check that the correct number are found in the naming file
+length(grep("FAST", IDP_names$map))
+
+```
+
+Subcortical volumes (FIRST) are fields 25011 to 25024
+There are 14 IDP on the showcase, as of 9/8/21 all are present in this file
+
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP >= 25011 & numeric_IDP <= 25024, "T1", MRI)) %>%
+  mutate(map = ifelse(numeric_IDP >= 25011 & numeric_IDP <= 25024, "FIRST", map))
+
+# Check that the correct number are found in the naming file
+length(grep("FIRST", IDP_names$map))
+
+```
+
+Freesurfer ASEG are fields 26501 to 26599
+
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP >= 26501 & numeric_IDP <= 26599, "T1", MRI)) %>%
+  mutate(map = ifelse(numeric_IDP >= 26501 & numeric_IDP <= 26599, "freesurfer_ASEG", map))
+
+# Check that the correct number are found in the naming file
+length(grep("freesurfer_ASEG", IDP_names$map))
+
+```
+
+Freesurfer BA exvivo are fields 27059 to 27143
+There are 84 IDP listed on the showcase
+
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP >= 27059 & numeric_IDP <= 27143, "T1", MRI)) %>%
+  mutate(map = ifelse(numeric_IDP >= 27059 & numeric_IDP <= 27143, "freesurfer_BA", map))
+
+# Check that the correct number are found in the naming file
+length(grep("freesurfer_BA", IDP_names$map))
+
+```
+
+Freesurfer a2009s are fields 27329 to 27772
+There are 444 IDP listed on the showcase
+
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP >= 27329 & numeric_IDP <= 27772, "T1", MRI)) %>%
+  mutate(map = ifelse(numeric_IDP >= 27329 & numeric_IDP <= 27772, "freesurfer_a2009s", map))
+
+# Check that the correct number are found in the naming file
+length(grep("freesurfer_a2009s", IDP_names$map))
+
+```
+
+Freesurfer DKT IDPs are 27143 to 27328 (the left are assigned before the right, so they alternate counting up in showcase)
+The showcase reports 186 IDPs in this set
+
+```{r}
+
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP >= 27143 & numeric_IDP <= 27328, "T1", MRI)) %>%
+  mutate(map = ifelse(numeric_IDP >= 27143 & numeric_IDP <= 27328, "freesurfer_DKT", map))
+
+# Check that the correct number are found in the naming file
+length(grep("freesurfer_DKT", IDP_names$map))
+
+```
+
+Freesurfer desikan gw IDPs are 26989 to 27058
+There should be 70
+
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP >= 26989 & numeric_IDP <= 27058, "T1", MRI)) %>%
+  mutate(map = ifelse(numeric_IDP >= 26989 & numeric_IDP <= 27058, "desikan_gw", map))
+
+# Check that the correct number are found in the naming file
+length(grep("desikan_gw", IDP_names$map))
+
+```
+
+Freesurfer desikan pial IDPs are 26923 to 26988
+There should be 66
+
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP >= 26923 & numeric_IDP <= 26988, "T1", MRI)) %>%
+  mutate(map = ifelse(numeric_IDP >= 26923 & numeric_IDP <= 26988, "desikan_pial", map))
+
+# Check that the correct number are found in the naming file
+length(grep("desikan_pial", IDP_names$map))
+```
+
+Freesurfer desikan white IDPs are 26721 to 26921
+There should be 202
+
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP >= 26721 & numeric_IDP <= 26922, "T1", MRI)) %>%
+  mutate(map = ifelse(numeric_IDP >= 26721 & numeric_IDP <= 26922, "desikan_white", map))
+
+# Check that the correct number are found in the naming file
+length(grep("desikan_white", IDP_names$map))
+```
+
+Freesurfer subsegmentation IDPs are 26600 to 26720
+There should be 121
+
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP >= 26600 & numeric_IDP <= 26720, "T1", MRI)) %>%
+  mutate(map = ifelse(numeric_IDP >= 26600 & numeric_IDP <= 26720, "freesurfer_subseg", map))
+
+# Check that the correct number are found in the naming file
+length(grep("freesurfer_subseg", IDP_names$map))
+
+```
+
+Label fields for T2 MRI
+Yoonhoo's slide says there should be 33 of these with different subregions
+There are two measures under category 112 T2 weighted brain MRI
+
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = case_when(
+    numeric_IDP == 25781 ~ "T2",
+    numeric_IDP == 25736 ~ "T2",
+    TRUE ~ MRI
+  ))
+
+```
+
+
+There are 18 fields under category 109 susceptibility weighted brain MRI
+Some of these fields are 202 series and are not in our imaging names file
+Label the ones that are, range is 25026 to 25039, although not all values in between these are present
+There are also a few completely outside this range
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP >= 25026 & numeric_IDP <= 25039, "T2", MRI))
+
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP == 25738, "T2", MRI))
+
+
+# Check that the correct number are found in the naming file
+length(grep("T2", IDP_names$MRI))
+
+
+```
+As of 9/8/21 we find 17 total T2 fields through the data set.
+
+
+Task functional MRI
+Yoonhoo's slide lists 12 IDPs for this, the showcase has 28 fields
+A few of the fields in the showcase are 202- series, I think this is processed information that would be in with the phenotypes
+
+Two ranges:
+25740 to 25768, but not all of these numbers are present
+25040 to 25054, not all numbers in between present
+
+9/8/21 we are capturing 25 fields in the naming document, for now this is good enough
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP >= 25740 & numeric_IDP <= 25768, "task_functional", MRI)) %>%
+  mutate(MRI = ifelse(numeric_IDP >= 25040 & numeric_IDP <= 25054, "task_functional", MRI))
+
+# Check that the correct number are found in the naming file
+length(grep("task_functional", IDP_names$MRI))
+```
+
+Diffusion weighted MRI
+
+dMRI skeleton is IDP fields 25056 to 25487 for 432 data fields
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP >= 25056 & numeric_IDP <= 25487, "dMRI", MRI)) %>%
+  mutate(map = ifelse(numeric_IDP >= 25056 & numeric_IDP <= 25487, "skeleton", map))
+
+# Check that the correct number are found in the naming file
+length(grep("skeleton", IDP_names$map))
+
+```
+
+dMRI weighted means is IDP fields 25488 to 25730 for 243 data fields
+
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP >= 25488 & numeric_IDP <= 25730, "dMRI", MRI)) %>%
+  mutate(map = ifelse(numeric_IDP >= 25488 & numeric_IDP <= 25730, "weighted_mean", map))
+
+# Check that the correct number are found in the naming file
+length(grep("weighted_mean", IDP_names$map))
+
+```
+
+Within diffusion MRI there are different types, make a column to capture these
+```{r}
+
+IDP_names <- IDP_names %>%
+  mutate(dMRI = case_when(
+    grepl("ean FA", IDP_names$IDP_name) ~ "FA",
+    grepl("ean MD", IDP_names$IDP_name) ~ "MD",
+    grepl("ean MO", IDP_names$IDP_name) ~ "MO",
+    grepl("ean ISOVF", IDP_names$IDP_name) ~ "ISOVF",
+    grepl("ean ICVF", IDP_names$IDP_name) ~ "ICVF",
+    grepl("ean L1", IDP_names$IDP_name) ~ "L1",
+    grepl("ean L2", IDP_names$IDP_name) ~ "L2",
+    grepl("ean L3", IDP_names$IDP_name) ~ "L3",
+    grepl("ean OD", IDP_names$IDP_name) ~ "OD", # OD is present in the naming file but did not appear on Yoonhoo's slide
+  ))
+
+
+```
+
+Resting functional MRI
+Range is between 25739 and 25755, not including all these numbers
+I think these are interspersed with the task functional because they were getting classed that way
+14 data fields are listed in the showcase, 10 of them should be in the naming set
+The other 4 are outside the range of what is included in our IDPs
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP %in% c(25739, 25741, 25743, 25744, 25750, 25751, 25752, 25753, 25754, 25755),
+                      "resting_functional", MRI))
+
+# Check that the correct number are found in the naming file
+length(grep("resting_functional", IDP_names$MRI))
+```
+
+For the T1 segmentations, add a dimension column to indicate what is being measured (area, thickness, volume)
+```{r}
+
+IDP_names <- IDP_names %>%
+  mutate(dimension = case_when(
+    grepl("area", tolower(IDP_names$IDP_name), fixed = TRUE) ~ "area",
+    grepl("thickness", tolower(IDP_names$IDP_name), fixed = TRUE) ~ "thickness",
+    grepl("volume", tolower(IDP_names$IDP_name), fixed = TRUE) ~ "volume",
+    grepl("mean intensity", tolower(IDP_names$IDP_name), fixed = TRUE) ~ "mean_intensity"))
+
+```
+
+Most IDPs are assigned to a group, check what is remaining
+
+```{r}
+
+no_MRI <- IDP_names %>%
+  filter(is.na(MRI))
+
+no_MRI
+
+```
+
+Global (total) brain volumes
+
+25000 to 25010 are total brain volumes derived from T1. For map I put global
+As is 25025 (volume of brain stem + 4th ventricle)
+25731 to 25738 are for quality control and processing, call the MRI on these QC
+
+The remaining IDP is acquisition protocol phase, also for QC and processing
+```{r}
+IDP_names <- IDP_names %>%
+  mutate(MRI = ifelse(numeric_IDP >= 25000 & numeric_IDP <= 25010, "T1", MRI)) %>%
+  mutate(map = ifelse(numeric_IDP >= 25000 & numeric_IDP <= 25010, "global", map)) %>%
+  mutate(MRI = ifelse(numeric_IDP == 25025, "T1", MRI)) %>%
+  mutate(map = ifelse(numeric_IDP == 25025, "global", map)) %>%
+  mutate(MRI = ifelse(numeric_IDP >= 25731 & numeric_IDP <= 25738, "QC", MRI)) %>%
+  mutate(MRI = ifelse(numeric_IDP == 25780, "QC", MRI))
+
+```
+
+
+Add a column to express when structures are part of a superstructure - ex. amygdala is part of the limbic system
+10/31/21 Updated this so lobes are not a separate column
+
+Import the table with names assigned by Yoonhoo that was emailed out on 11/30/21
+This was part of a larger file with her results, I pulled out the names to a separate file to use in this analysis
+
+
+```{r}
+
+region_mapping <- read.csv(paste0("Yoonhoo_assigned_IDP_regions_11-30-21.csv"))
+
+```
+
+Select out the IDP and corresponding region name, then left join into the IDP_names
+I was previously using word search to assign these but the by hand method is necessary to ensure we made the right decision about each one.
+```{r}
+
+region_mapping <- region_mapping %>%
+  select(IDP, Region) %>%
+  dplyr::rename("numeric_IDP" = IDP, "region" = Region)
+  
+
+IDP_names <- left_join(IDP_names, region_mapping, by = "numeric_IDP")
+
+```
+
+There are some measures with no region, some of these are global measures but not all
+Label measures which reflect global volumes with region = global
+```{r}
+
+IDP_names <- IDP_names %>%
+  mutate(region = ifelse(numeric_IDP >= 25000 & numeric_IDP <= 25010, "global", region)) %>%
+  mutate(region = ifelse(numeric_IDP == 25025, "global", region))
+
+```
+
+Measures of global volume from Freesurfer ASEG
+Ensure these have global as the region for these so they can be easily identified
+26514 = ASEG total volume
+26518 = ASEG total grey matter volume
+26527 = ASEG CSF volume
+26553, 26584 = left and right white matter volume
+
+IDPs 26755 and 26856 represent left and right "mean thickness of global mean thickness". We use them as a global variable alongside the aseg global variables
+```{r}
+
+IDP_names <- IDP_names %>%
+  mutate(region = ifelse(numeric_IDP %in% c(25001, 25003, 25005, 25007, 25009,
+                                            26514, 26518, 26527, 26528, 26553, 26584), "global", region))
+
+```
+
+For controlling in models and some results we want total white matter volume and an overall mean thickness
+We also calculate overall FA, MD, ICVF, ISOVF
+Make rows to accommodate these IDP derived measures
+```{r}
+
+derived_global <- data.frame(matrix(ncol = ncol(IDP_names), nrow = 14))
+colnames(derived_global) <- colnames(IDP_names)
+
+derived_global$IDP_name <- c("total white matter", "total cortical volume", "global mean thickness",
+                             "fast_cortical", "fast_subcortical", "scaled_fast_cortical", "scaled_fast_subcortical",
+                             "total_cerebellum",
+                             "mean FA", "mean MD", "mean ICVF", "mean ISOVF", "mean MO", "mean OD")
+derived_global$IDP <- c("total_wm", "total_cortex", "global_mean_thk",
+                        "fast_cortical", "fast_subcortical", "scaled_fast_cortical", "scaled_fast_subcortical",
+                        "total_cerebellum",
+                        "mean_FA", "mean_MD", "mean_ICVF", "mean_ISOVF", "mean_MO", "mean_OD")
+derived_global$MRI <- c(rep("T1", 8), rep("dMRI", 6))
+derived_global$dMRI <- c(rep(NA, 8), "FA", "MD", "ICVF", "ISOVF", "MO", "OD")
+derived_global$region <- rep("global", 14)
+derived_global$map <- c(rep("derived", 14))
+derived_global$dimension <- c("volume", "volume", "thickness", rep("volume", 5), rep(NA, 6))
+
+
+```
+
+Stick the derived global IDPs onto the main table
+```{r}
+
+IDP_names <- rbind(IDP_names, derived_global)
+
+```
+
+Freesurfer ASEG has some global / overall measures mixed in with regional, make sure these are all marked
+I identified these by reading through the UK Biobank showcase (https://biobank.ndph.ox.ac.uk/showcase/label.cgi?id=190)
+```{r}
+
+aseg_global <- c(
+  "X26514.2.0", #Volume of BrainSeg (whole brain)
+  "X26515.2.0", #	Volume of BrainSegNotVent (whole brain)
+  "X26516.2.0", #	Volume of BrainSegNotVentSurf (whole brain)
+  "X26527.2.0", #	Volume of CSF (whole brain)
+  "X26553.2.0", #	Volume of CerebralWhiteMatter (left hemisphere)
+  "X26584.2.0", #	Volume of CerebralWhiteMatter (right hemisphere)
+  "X26552.2.0", #	Volume of Cortex (left hemisphere)
+  "X26583.2.0", #	Volume of Cortex (right hemisphere)
+  "X26521.2.0", #	Volume of EstimatedTotalIntraCranial (whole brain)
+  "X26517.2.0", #	Volume of SubCortGray (whole brain)
+  "X26519.2.0", #	Volume of SupraTentorial (whole brain)
+  "X26520.2.0", #	Volume of SupraTentorialNotVent (whole brain)
+  "X26522.2.0", #	Volume of VentricleChoroid (whole brain)
+  "X26528.2.0", #	Volume of WM-hypointensities (whole brain)
+  "X26529.2.0", #	Volume of non-WM-hypointensities (whole brain)
+  "X26566.2.0", #	Volume of vessel (left hemisphere)
+  "X26597.2.0") #	Volume of vessel (right hemisphere)
+
+aseg_QC <- c(
+  "X26568.2.0", #	Number of HolesBeforeFixing (left hemisphere)
+  "X26599.2.0", #	Number of HolesBeforeFixing (right hemisphere)
+  "X26536.2.0", #	Volume-ratio of BrainSegVol-to-eTIV (whole brain)
+  "X26537.2.0") #	Volume-ratio of MaskVol-to-eTIV (whole brain)
+
+aseg_cerebellum <- c(
+  "X26557.2.0", #	Volume of Cerebellum-Cortex (left hemisphere)
+  "X26588.2.0", #	Volume of Cerebellum-Cortex (right hemisphere)
+  "X26556.2.0", #	Volume of Cerebellum-White-Matter (left hemisphere)
+  "X26587.2.0") #	Volume of Cerebellum-White-Matter (right hemisphere)
+
+aseg_ventricles <-c(
+  "X26523.2.0", #	Volume of 3rd-Ventricle (whole brain)
+  "X26524.2.0", #	Volume of 4th-Ventricle (whole brain)
+  "X26525.2.0", #	Volume of 5th-Ventricle (whole brain)
+  "X26555.2.0", #	Volume of Inf-Lat-Vent (left hemisphere)
+  "X26586.2.0", #	Volume of Inf-Lat-Vent (right hemisphere)
+  "X26554.2.0", #	Volume of Lateral-Ventricle (left hemisphere)
+  "X26585.2.0") #	Volume of Lateral-Ventricle (right hemisphere)
+
+
+```
+
+```{r}
+
+IDP_names <- IDP_names %>%
+  mutate(region = ifelse(IDP %in% aseg_global, "global", region)) %>%
+  mutate(region = ifelse(IDP %in% aseg_QC, "QC", region)) %>%
+  mutate(region = ifelse(IDP %in% aseg_cerebellum, "cerebellum", region)) %>%
+  mutate(region = ifelse(IDP %in% aseg_ventricles, "ventricles", region)) %>%
+  
+  # A few ASEG regions also get mis-classified as area, fix this
+  mutate(dimension = ifelse(map == "freesurfer_ASEG", 
+                            ifelse(dimension != "mean_intensity", "volume", dimension), dimension))
+
+```
+
+
+Group the regions by cortical or subcortical
+```{r}
+
+unique(IDP_names$region)
+
+```
+
+Make a table with all the regions, and where they fall
+This is not the most efficient way to make a table, but it is easy to read and edit how the regions are assigned
+```{r}
+
+regions_to_cortical <- data.frame((rbind(
+  c("caudate", "subcortical"),
+  c("global", NA),
+  c("thalamus", "subcortical"),
+  c("putamen", "subcortical"),
+  c("pallidum", "subcortical"),
+  c("hippocampus", "subcortical"),
+  c("amygdala", "subcortical"),
+  c("accumbens", "subcortical"),
+  c("peduncle", "subcortical"),
+  c("pontine crossing tract", "subcortical"),
+  c("corpus callosum", "subcortical"),
+  c("fornix", "subcortical"),
+  c("corticospinal tract", "subcortical"),
+  c("medial lemniscus", "subcortical"),
+  c("internal capsule", "subcortical"),
+  c("corona radiata", "subcortical"),
+  c("sagittal stratum", "subcortical"),
+  c("external capsule", "subcortical"),
+  c("cingulate   ", "cortical"),
+  c("longitudinal fasciculus", "subcortical"),
+  c("occipital", "cortical"),
+  c("uncinate fasciculus", "subcortical"),
+  c("acoustic radiation", "subcortical"),
+  c("cingulum", "subcortical"),
+  c("forceps major", "subcortical"),
+  c("forceps minor", "subcortical"),
+  c("frontal", "cortical"),
+  c("insula", "cortical"),
+  c("precentral", "cortical"),
+  c("temporal", "cortical"),
+  c("parietal", "cortical"),
+  c("SMA", "cortical"),
+  c("parahippocampal", "cortical"), # Fixed this 8/16/22
+  c("striatum", "subcortical"),
+  c("brainstem", "subcortical"),
+  c("cerebellum", "subcortical"),
+  c("fusiform", "cortical"),
+  c("paracentral", "cortical"))))
+
+
+regions_to_cortical <- regions_to_cortical %>%
+  dplyr::rename("region" = X1, "cortical" = X2)
+
+```
+
+Add this as a column to the IDP names
+```{r}
+
+IDP_names <- IDP_names %>%
+  left_join(regions_to_cortical, by = "region")
+
+```
+
+
+
+Make columns to indicate right and left hemispheres
+```{r}
+
+IDP_names <- IDP_names %>%
+  mutate(hemisphere = ifelse(grepl("right", tolower(IDP_names$IDP_name), fixed = TRUE), "right",
+                             ifelse(grepl("left", tolower(IDP_names$IDP_name), fixed = TRUE), "left",
+                                    ifelse(grepl("vermis", tolower(IDP_names$IDP_name), fixed = TRUE), "vermis",
+                                    NA))))
+
+```
+
+
+Use left / right to detect paired measures and match them to their opposite
+Split on opening parentheses to get rid of the (left) / (right) in the names
+Have to add the T1 map to strip name or else there will be indistinguishable duplicates in the name
+```{r}
+
+left_hemisphere <- IDP_names %>%
+  mutate(strip_name = strsplit(IDP_names$IDP_name, "\\(")) %>%
+  mutate(strip_name = purrr::map(strip_name, purrr::pluck, 1)) %>%
+  mutate(strip_name = trimws(paste(strip_name, map))) %>%
+  filter(hemisphere == "left") %>%
+  select(IDP, strip_name)
+
+# Check for duplicated values in strip name
+sum(duplicated(left_hemisphere$strip_name))
+
+```
+
+```{r}
+
+right_hemisphere <- IDP_names %>%
+  mutate(strip_name = strsplit(IDP_names$IDP_name, "\\(")) %>%
+  mutate(strip_name = purrr::map(strip_name, purrr::pluck, 1)) %>%
+  mutate(strip_name = trimws(paste(strip_name, map))) %>%
+  filter(hemisphere == "right") %>%
+  dplyr::rename("paired" = "IDP") %>%
+  select(strip_name, paired)
+
+```
+
+Join the left and right hemispheres over strip_name
+Check the length before and after to make sure join doesn't create rows
+
+```{r}
+print(paste("Before join:", nrow(left_hemisphere)))
+left_hemisphere <- left_join(left_hemisphere, right_hemisphere, by = "strip_name")
+print(paste("After join:", nrow(left_hemisphere)))
+
+```
+Rename to make columns relevant to the right hemisphere, then stack
+
+```{r}
+right_hemisphere <- left_hemisphere %>%
+  dplyr::rename("IDP" = "paired", "paired" = "IDP")
+
+paired_cols <- rbind(left_hemisphere, right_hemisphere)
+
+```
+
+Remove strip name (don't need it) and rejoin paired columns onto IDP_names
+
+```{r}
+paired_cols <- paired_cols %>%
+  select(IDP, paired)
+
+print(paste("Before join:", nrow(IDP_names)))
+IDP_names <- left_join(IDP_names, paired_cols, by = "IDP")
+print(paste("After join:", nrow(IDP_names)))
+
+```
+
+Create the rfMRI names (these are derived from IDPs)
+```{r}
+
+rfMRI_names <- data.frame(matrix(ncol = ncol(IDP_names), nrow = 6))
+colnames(rfMRI_names) <- colnames(IDP_names)
+
+rfMRI_names$IDP_name <- c("ICA1", "ICA2", "ICA3", "ICA4", "ICA5", "ICA6")
+rfMRI_names$IDP <- c("ICA1", "ICA2", "ICA3", "ICA4", "ICA5", "ICA6")
+rfMRI_names$numeric_IDP <- c("1", "2", "3", "4", "5", "6")
+rfMRI_names$MRI <- rep("rfMRI", 6)
+rfMRI_names$region <- rep("global", 6)
+
+
+```
+
+Stick the rfMRI names onto the main table
+```{r}
+
+IDP_names <- rbind(IDP_names, rfMRI_names)
+
+```
+
+
+Make a column of numbering for display - want this to be grouped by region
+
+```{r}
+
+IDP_names <- IDP_names %>%
+  mutate(display_group = paste0(hemisphere, "_", region)) %>%
+  mutate(display_group = gsub("NA_", "", display_group)) # Remove NA that get into the display_group names
+
+```
+
+
+Save the IDP names table for easy joining to future data sets
+
+```{r}
+IDP_name_table <- IDP_names
+save(IDP_name_table, file = paste0(output_path, "IDP_names_table_", Sys.Date(), ".RData"))
+
+```
+
+Also save as .csv
+```{r}
+
+write.csv(IDP_name_table, file = paste0(output_path, "IDP_names_table_", Sys.Date(), ".csv"))
+
+```
+
+
+```{r}
+
+print(paste0("Script last run ", Sys.Date()))
+
+```
+

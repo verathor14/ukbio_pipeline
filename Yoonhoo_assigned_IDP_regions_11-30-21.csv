@@ -1,0 +1,925 @@
+IDP,Legible Name,Group,Region,Hemisphere
+25011,Volume of thalamus (left),Subcortical Volumes,thalamus,left
+25012,Volume of thalamus (right),Subcortical Volumes,thalamus,right
+25013,Volume of caudate (left),Subcortical Volumes,caudate,left
+25014,Volume of caudate (right),Subcortical Volumes,caudate,right
+25015,Volume of putamen (left),Subcortical Volumes,putamen,left
+25016,Volume of putamen (right),Subcortical Volumes,putamen,right
+25017,Volume of pallidum (left),Subcortical Volumes,pallidum,left
+25018,Volume of pallidum (right),Subcortical Volumes,pallidum,right
+25019,Volume of hippocampus (left),Subcortical Volumes,hippocampus,left
+25020,Volume of hippocampus (right),Subcortical Volumes,hippocampus,right
+25021,Volume of amygdala (left),Subcortical Volumes,amygdala,left
+25022,Volume of amygdala (right),Subcortical Volumes,amygdala,right
+25023,Volume of accumbens (left),Subcortical Volumes,accumbens,left
+25024,Volume of accumbens (right),Subcortical Volumes,accumbens,right
+25026,Median T2star in thalamus (left),Median T2 star,thalamus,left
+25027,Median T2star in thalamus (right),Median T2 star,thalamus,right
+25028,Median T2star in caudate (left),Median T2 star,caudate,left
+25029,Median T2star in caudate (right),Median T2 star,caudate,right
+25030,Median T2star in putamen (left),Median T2 star,putamen,left
+25031,Median T2star in putamen (right),Median T2 star,putamen,right
+25032,Median T2star in pallidum (left),Median T2 star,pallidum,left
+25033,Median T2star in pallidum (right),Median T2 star,pallidum,right
+25034,Median T2star in hippocampus (left),Median T2 star,hippocampus,left
+25035,Median T2star in hippocampus (right),Median T2 star,hippocampus,right
+25036,Median T2star in amygdala (left),Median T2 star,amygdala,left
+25037,Median T2star in amygdala (right),Median T2 star,amygdala,right
+25038,Median T2star in accumbens (left),Median T2 star,accumbens,left
+25039,Median T2star in accumbens (right),Median T2 star,accumbens,right
+25056,Mean FA in middle cerebellar peduncle on FA skeleton,FA,peduncle,NA
+25057,Mean FA in pontine crossing tract on FA skeleton,FA,pontine crossing tract,NA
+25058,Mean FA in genu of corpus callosum on FA skeleton,FA,corpus callosum,NA
+25059,Mean FA in body of corpus callosum on FA skeleton,FA,corpus callosum,NA
+25060,Mean FA in splenium of corpus callosum on FA skeleton,FA,corpus callosum,NA
+25061,Mean FA in fornix on FA skeleton,FA,fornix,NA
+25062,Mean FA in corticospinal tract on FA skeleton (right),FA,corticospinal tract,right
+25063,Mean FA in corticospinal tract on FA skeleton (left),FA,corticospinal tract,left
+25064,Mean FA in medial lemniscus on FA skeleton (right),FA,medial lemniscus,right
+25065,Mean FA in medial lemniscus on FA skeleton (left),FA,medial lemniscus,left
+25066,Mean FA in inferior cerebellar peduncle on FA skeleton (right),FA,peduncle,right
+25067,Mean FA in inferior cerebellar peduncle on FA skeleton (left),FA,peduncle,left
+25068,Mean FA in superior cerebellar peduncle on FA skeleton (right),FA,peduncle,right
+25069,Mean FA in superior cerebellar peduncle on FA skeleton (left),FA,peduncle,left
+25070,Mean FA in cerebral peduncle on FA skeleton (right),FA,peduncle,right
+25071,Mean FA in cerebral peduncle on FA skeleton (left),FA,peduncle,left
+25072,Mean FA in anterior limb of internal capsule on FA skeleton (right),FA,internal capsule,right
+25073,Mean FA in anterior limb of internal capsule on FA skeleton (left),FA,internal capsule,left
+25074,Mean FA in posterior limb of internal capsule on FA skeleton (right),FA,internal capsule,right
+25075,Mean FA in posterior limb of internal capsule on FA skeleton (left),FA,internal capsule,left
+25076,Mean FA in retrolenticular part of internal capsule on FA skeleton (right),FA,internal capsule,right
+25077,Mean FA in retrolenticular part of internal capsule on FA skeleton (left),FA,internal capsule,left
+25078,Mean FA in anterior corona radiata on FA skeleton (right),FA,corona radiata,right
+25079,Mean FA in anterior corona radiata on FA skeleton (left),FA,corona radiata,left
+25080,Mean FA in superior corona radiata on FA skeleton (right),FA,corona radiata,right
+25081,Mean FA in superior corona radiata on FA skeleton (left),FA,corona radiata,left
+25082,Mean FA in posterior corona radiata on FA skeleton (right),FA,corona radiata,right
+25083,Mean FA in posterior corona radiata on FA skeleton (left),FA,corona radiata,left
+25084,Mean FA in posterior thalamic radiation on FA skeleton (right),FA,thalamus,right
+25085,Mean FA in posterior thalamic radiation on FA skeleton (left),FA,thalamus,left
+25086,Mean FA in sagittal stratum on FA skeleton (right),FA,sagittal stratum,right
+25087,Mean FA in sagittal stratum on FA skeleton (left),FA,sagittal stratum,left
+25088,Mean FA in external capsule on FA skeleton (right),FA,external capsule,right
+25089,Mean FA in external capsule on FA skeleton (left),FA,external capsule,left
+25090,Mean FA in cingulum cingulate gyrus on FA skeleton (right),FA,cingulate   ,right
+25091,Mean FA in cingulum cingulate gyrus on FA skeleton (left),FA,cingulate   ,left
+25092,Mean FA in cingulum hippocampus on FA skeleton (right),FA,hippocampus,right
+25093,Mean FA in cingulum hippocampus on FA skeleton (left),FA,hippocampus,left
+25094,Mean FA in fornix cres+stria terminalis on FA skeleton (right),FA,fornix,right
+25095,Mean FA in fornix cres+stria terminalis on FA skeleton (left),FA,fornix,left
+25096,Mean FA in superior longitudinal fasciculus on FA skeleton (right),FA,longitudinal fasciculus,right
+25097,Mean FA in superior longitudinal fasciculus on FA skeleton (left),FA,longitudinal fasciculus,left
+25098,Mean FA in superior fronto-occipital fasciculus on FA skeleton (right),FA,occipital,right
+25099,Mean FA in superior fronto-occipital fasciculus on FA skeleton (left),FA,occipital,left
+25100,Mean FA in uncinate fasciculus on FA skeleton (right),FA,uncinate fasciculus,right
+25101,Mean FA in uncinate fasciculus on FA skeleton (left),FA,uncinate fasciculus,left
+25102,Mean FA in tapetum on FA skeleton (right),FA,corpus callosum,right
+25103,Mean FA in tapetum on FA skeleton (left),FA,corpus callosum,left
+25104,Mean MD in middle cerebellar peduncle on FA skeleton,MD,peduncle,NA
+25105,Mean MD in pontine crossing tract on FA skeleton,MD,pontine crossing tract,NA
+25106,Mean MD in genu of corpus callosum on FA skeleton,MD,corpus callosum,NA
+25107,Mean MD in body of corpus callosum on FA skeleton,MD,corpus callosum,NA
+25108,Mean MD in splenium of corpus callosum on FA skeleton,MD,corpus callosum,NA
+25109,Mean MD in fornix on FA skeleton,MD,fornix,NA
+25110,Mean MD in corticospinal tract on FA skeleton (right),MD,corticospinal tract,right
+25111,Mean MD in corticospinal tract on FA skeleton (left),MD,corticospinal tract,left
+25112,Mean MD in medial lemniscus on FA skeleton (right),MD,medial lemniscus,right
+25113,Mean MD in medial lemniscus on FA skeleton (left),MD,medial lemniscus,left
+25114,Mean MD in inferior cerebellar peduncle on FA skeleton (right),MD,peduncle,right
+25115,Mean MD in inferior cerebellar peduncle on FA skeleton (left),MD,peduncle,left
+25116,Mean MD in superior cerebellar peduncle on FA skeleton (right),MD,peduncle,right
+25117,Mean MD in superior cerebellar peduncle on FA skeleton (left),MD,peduncle,left
+25118,Mean MD in cerebral peduncle on FA skeleton (right),MD,peduncle,right
+25119,Mean MD in cerebral peduncle on FA skeleton (left),MD,peduncle,left
+25120,Mean MD in anterior limb of internal capsule on FA skeleton (right),MD,internal capsule,right
+25121,Mean MD in anterior limb of internal capsule on FA skeleton (left),MD,internal capsule,left
+25122,Mean MD in posterior limb of internal capsule on FA skeleton (right),MD,internal capsule,right
+25123,Mean MD in posterior limb of internal capsule on FA skeleton (left),MD,internal capsule,left
+25124,Mean MD in retrolenticular part of internal capsule on FA skeleton (right),MD,internal capsule,right
+25125,Mean MD in retrolenticular part of internal capsule on FA skeleton (left),MD,internal capsule,left
+25126,Mean MD in anterior corona radiata on FA skeleton (right),MD,corona radiata,right
+25127,Mean MD in anterior corona radiata on FA skeleton (left),MD,corona radiata,left
+25128,Mean MD in superior corona radiata on FA skeleton (right),MD,corona radiata,right
+25129,Mean MD in superior corona radiata on FA skeleton (left),MD,corona radiata,left
+25130,Mean MD in posterior corona radiata on FA skeleton (right),MD,corona radiata,right
+25131,Mean MD in posterior corona radiata on FA skeleton (left),MD,corona radiata,left
+25132,Mean MD in posterior thalamic radiation on FA skeleton (right),MD,thalamus,right
+25133,Mean MD in posterior thalamic radiation on FA skeleton (left),MD,thalamus,left
+25134,Mean MD in sagittal stratum on FA skeleton (right),MD,sagittal stratum,right
+25135,Mean MD in sagittal stratum on FA skeleton (left),MD,sagittal stratum,left
+25136,Mean MD in external capsule on FA skeleton (right),MD,external capsule,right
+25137,Mean MD in external capsule on FA skeleton (left),MD,external capsule,left
+25138,Mean MD in cingulum cingulate gyrus on FA skeleton (right),MD,cingulate   ,right
+25139,Mean MD in cingulum cingulate gyrus on FA skeleton (left),MD,cingulate   ,left
+25140,Mean MD in cingulum hippocampus on FA skeleton (right),MD,hippocampus,right
+25141,Mean MD in cingulum hippocampus on FA skeleton (left),MD,hippocampus,left
+25142,Mean MD in fornix cres+stria terminalis on FA skeleton (right),MD,fornix,right
+25143,Mean MD in fornix cres+stria terminalis on FA skeleton (left),MD,fornix,left
+25144,Mean MD in superior longitudinal fasciculus on FA skeleton (right),MD,longitudinal fasciculus,right
+25145,Mean MD in superior longitudinal fasciculus on FA skeleton (left),MD,longitudinal fasciculus,left
+25146,Mean MD in superior fronto-occipital fasciculus on FA skeleton (right),MD,occipital,right
+25147,Mean MD in superior fronto-occipital fasciculus on FA skeleton (left),MD,occipital,left
+25148,Mean MD in uncinate fasciculus on FA skeleton (right),MD,uncinate fasciculus,right
+25149,Mean MD in uncinate fasciculus on FA skeleton (left),MD,uncinate fasciculus,left
+25150,Mean MD in tapetum on FA skeleton (right),MD,corpus callosum,right
+25151,Mean MD in tapetum on FA skeleton (left),MD,corpus callosum,left
+25152,Mean MO in middle cerebellar peduncle on FA skeleton,MO,peduncle,NA
+25153,Mean MO in pontine crossing tract on FA skeleton,MO,pontine crossing tract,NA
+25154,Mean MO in genu of corpus callosum on FA skeleton,MO,corpus callosum,NA
+25155,Mean MO in body of corpus callosum on FA skeleton,MO,corpus callosum,NA
+25156,Mean MO in splenium of corpus callosum on FA skeleton,MO,corpus callosum,NA
+25157,Mean MO in fornix on FA skeleton,MO,fornix,NA
+25158,Mean MO in corticospinal tract on FA skeleton (right),MO,corticospinal tract,right
+25159,Mean MO in corticospinal tract on FA skeleton (left),MO,corticospinal tract,left
+25160,Mean MO in medial lemniscus on FA skeleton (right),MO,medial lemniscus,right
+25161,Mean MO in medial lemniscus on FA skeleton (left),MO,medial lemniscus,left
+25162,Mean MO in inferior cerebellar peduncle on FA skeleton (right),MO,peduncle,right
+25163,Mean MO in inferior cerebellar peduncle on FA skeleton (left),MO,peduncle,left
+25164,Mean MO in superior cerebellar peduncle on FA skeleton (right),MO,peduncle,right
+25165,Mean MO in superior cerebellar peduncle on FA skeleton (left),MO,peduncle,left
+25166,Mean MO in cerebral peduncle on FA skeleton (right),MO,peduncle,right
+25167,Mean MO in cerebral peduncle on FA skeleton (left),MO,peduncle,left
+25168,Mean MO in anterior limb of internal capsule on FA skeleton (right),MO,internal capsule,right
+25169,Mean MO in anterior limb of internal capsule on FA skeleton (left),MO,internal capsule,left
+25170,Mean MO in posterior limb of internal capsule on FA skeleton (right),MO,internal capsule,right
+25171,Mean MO in posterior limb of internal capsule on FA skeleton (left),MO,internal capsule,left
+25172,Mean MO in retrolenticular part of internal capsule on FA skeleton (right),MO,internal capsule,right
+25173,Mean MO in retrolenticular part of internal capsule on FA skeleton (left),MO,internal capsule,left
+25174,Mean MO in anterior corona radiata on FA skeleton (right),MO,corona radiata,right
+25175,Mean MO in anterior corona radiata on FA skeleton (left),MO,corona radiata,left
+25176,Mean MO in superior corona radiata on FA skeleton (right),MO,corona radiata,right
+25177,Mean MO in superior corona radiata on FA skeleton (left),MO,corona radiata,left
+25178,Mean MO in posterior corona radiata on FA skeleton (right),MO,corona radiata,right
+25179,Mean MO in posterior corona radiata on FA skeleton (left),MO,corona radiata,left
+25180,Mean MO in posterior thalamic radiation on FA skeleton (right),MO,thalamus,right
+25181,Mean MO in posterior thalamic radiation on FA skeleton (left),MO,thalamus,left
+25182,Mean MO in sagittal stratum on FA skeleton (right),MO,sagittal stratum,right
+25183,Mean MO in sagittal stratum on FA skeleton (left),MO,sagittal stratum,left
+25184,Mean MO in external capsule on FA skeleton (right),MO,external capsule,right
+25185,Mean MO in external capsule on FA skeleton (left),MO,external capsule,left
+25186,Mean MO in cingulum cingulate gyrus on FA skeleton (right),MO,cingulate   ,right
+25187,Mean MO in cingulum cingulate gyrus on FA skeleton (left),MO,cingulate   ,left
+25188,Mean MO in cingulum hippocampus on FA skeleton (right),MO,hippocampus,right
+25189,Mean MO in cingulum hippocampus on FA skeleton (left),MO,hippocampus,left
+25190,Mean MO in fornix cres+stria terminalis on FA skeleton (right),MO,fornix,right
+25191,Mean MO in fornix cres+stria terminalis on FA skeleton (left),MO,fornix,left
+25192,Mean MO in superior longitudinal fasciculus on FA skeleton (right),MO,longitudinal fasciculus,right
+25193,Mean MO in superior longitudinal fasciculus on FA skeleton (left),MO,longitudinal fasciculus,left
+25194,Mean MO in superior fronto-occipital fasciculus on FA skeleton (right),MO,occipital,right
+25195,Mean MO in superior fronto-occipital fasciculus on FA skeleton (left),MO,occipital,left
+25196,Mean MO in uncinate fasciculus on FA skeleton (right),MO,uncinate fasciculus,right
+25197,Mean MO in uncinate fasciculus on FA skeleton (left),MO,uncinate fasciculus,left
+25198,Mean MO in tapetum on FA skeleton (right),MO,corpus callosum,right
+25199,Mean MO in tapetum on FA skeleton (left),MO,corpus callosum,left
+25344,Mean ICVF in middle cerebellar peduncle on FA skeleton,ICVF,peduncle,NA
+25345,Mean ICVF in pontine crossing tract on FA skeleton,ICVF,pontine crossing tract,NA
+25346,Mean ICVF in genu of corpus callosum on FA skeleton,ICVF,corpus callosum,NA
+25347,Mean ICVF in body of corpus callosum on FA skeleton,ICVF,corpus callosum,NA
+25348,Mean ICVF in splenium of corpus callosum on FA skeleton,ICVF,corpus callosum,NA
+25349,Mean ICVF in fornix on FA skeleton,ICVF,fornix,NA
+25350,Mean ICVF in corticospinal tract on FA skeleton (right),ICVF,corticospinal tract,right
+25351,Mean ICVF in corticospinal tract on FA skeleton (left),ICVF,corticospinal tract,left
+25352,Mean ICVF in medial lemniscus on FA skeleton (right),ICVF,medial lemniscus,right
+25353,Mean ICVF in medial lemniscus on FA skeleton (left),ICVF,medial lemniscus,left
+25354,Mean ICVF in inferior cerebellar peduncle on FA skeleton (right),ICVF,peduncle,right
+25355,Mean ICVF in inferior cerebellar peduncle on FA skeleton (left),ICVF,peduncle,left
+25356,Mean ICVF in superior cerebellar peduncle on FA skeleton (right),ICVF,peduncle,right
+25357,Mean ICVF in superior cerebellar peduncle on FA skeleton (left),ICVF,peduncle,left
+25358,Mean ICVF in cerebral peduncle on FA skeleton (right),ICVF,peduncle,right
+25359,Mean ICVF in cerebral peduncle on FA skeleton (left),ICVF,peduncle,left
+25360,Mean ICVF in anterior limb of internal capsule on FA skeleton (right),ICVF,internal capsule,right
+25361,Mean ICVF in anterior limb of internal capsule on FA skeleton (left),ICVF,internal capsule,left
+25362,Mean ICVF in posterior limb of internal capsule on FA skeleton (right),ICVF,internal capsule,right
+25363,Mean ICVF in posterior limb of internal capsule on FA skeleton (left),ICVF,internal capsule,left
+25364,Mean ICVF in retrolenticular part of internal capsule on FA skeleton (right),ICVF,internal capsule,right
+25365,Mean ICVF in retrolenticular part of internal capsule on FA skeleton (left),ICVF,internal capsule,left
+25366,Mean ICVF in anterior corona radiata on FA skeleton (right),ICVF,corona radiata,right
+25367,Mean ICVF in anterior corona radiata on FA skeleton (left),ICVF,corona radiata,left
+25368,Mean ICVF in superior corona radiata on FA skeleton (right),ICVF,corona radiata,right
+25369,Mean ICVF in superior corona radiata on FA skeleton (left),ICVF,corona radiata,left
+25370,Mean ICVF in posterior corona radiata on FA skeleton (right),ICVF,corona radiata,right
+25371,Mean ICVF in posterior corona radiata on FA skeleton (left),ICVF,corona radiata,left
+25372,Mean ICVF in posterior thalamic radiation on FA skeleton (right),ICVF,thalamus,right
+25373,Mean ICVF in posterior thalamic radiation on FA skeleton (left),ICVF,thalamus,left
+25374,Mean ICVF in sagittal stratum on FA skeleton (right),ICVF,sagittal stratum,right
+25375,Mean ICVF in sagittal stratum on FA skeleton (left),ICVF,sagittal stratum,left
+25376,Mean ICVF in external capsule on FA skeleton (right),ICVF,external capsule,right
+25377,Mean ICVF in external capsule on FA skeleton (left),ICVF,external capsule,left
+25378,Mean ICVF in cingulum cingulate gyrus on FA skeleton (right),ICVF,cingulate   ,right
+25379,Mean ICVF in cingulum cingulate gyrus on FA skeleton (left),ICVF,cingulate   ,left
+25380,Mean ICVF in cingulum hippocampus on FA skeleton (right),ICVF,hippocampus,right
+25381,Mean ICVF in cingulum hippocampus on FA skeleton (left),ICVF,hippocampus,left
+25382,Mean ICVF in fornix cres+stria terminalis on FA skeleton (right),ICVF,fornix,right
+25383,Mean ICVF in fornix cres+stria terminalis on FA skeleton (left),ICVF,fornix,left
+25384,Mean ICVF in superior longitudinal fasciculus on FA skeleton (right),ICVF,longitudinal fasciculus,right
+25385,Mean ICVF in superior longitudinal fasciculus on FA skeleton (left),ICVF,longitudinal fasciculus,left
+25386,Mean ICVF in superior fronto-occipital fasciculus on FA skeleton (right),ICVF,occipital,right
+25387,Mean ICVF in superior fronto-occipital fasciculus on FA skeleton (left),ICVF,occipital,left
+25388,Mean ICVF in uncinate fasciculus on FA skeleton (right),ICVF,uncinate fasciculus,right
+25389,Mean ICVF in uncinate fasciculus on FA skeleton (left),ICVF,uncinate fasciculus,left
+25390,Mean ICVF in tapetum on FA skeleton (right),ICVF,corpus callosum,right
+25391,Mean ICVF in tapetum on FA skeleton (left),ICVF,corpus callosum,left
+25392,Mean OD in middle cerebellar peduncle on FA skeleton,OD,peduncle,NA
+25393,Mean OD in pontine crossing tract on FA skeleton,OD,pontine crossing tract,NA
+25394,Mean OD in genu of corpus callosum on FA skeleton,OD,corpus callosum,NA
+25395,Mean OD in body of corpus callosum on FA skeleton,OD,corpus callosum,NA
+25396,Mean OD in splenium of corpus callosum on FA skeleton,OD,corpus callosum,NA
+25397,Mean OD in fornix on FA skeleton,OD,fornix,NA
+25398,Mean OD in corticospinal tract on FA skeleton (right),OD,corticospinal tract,right
+25399,Mean OD in corticospinal tract on FA skeleton (left),OD,corticospinal tract,left
+25400,Mean OD in medial lemniscus on FA skeleton (right),OD,medial lemniscus,right
+25401,Mean OD in medial lemniscus on FA skeleton (left),OD,medial lemniscus,left
+25402,Mean OD in inferior cerebellar peduncle on FA skeleton (right),OD,peduncle,right
+25403,Mean OD in inferior cerebellar peduncle on FA skeleton (left),OD,peduncle,left
+25404,Mean OD in superior cerebellar peduncle on FA skeleton (right),OD,peduncle,right
+25405,Mean OD in superior cerebellar peduncle on FA skeleton (left),OD,peduncle,left
+25406,Mean OD in cerebral peduncle on FA skeleton (right),OD,peduncle,right
+25407,Mean OD in cerebral peduncle on FA skeleton (left),OD,peduncle,left
+25408,Mean OD in anterior limb of internal capsule on FA skeleton (right),OD,internal capsule,right
+25409,Mean OD in anterior limb of internal capsule on FA skeleton (left),OD,internal capsule,left
+25410,Mean OD in posterior limb of internal capsule on FA skeleton (right),OD,internal capsule,right
+25411,Mean OD in posterior limb of internal capsule on FA skeleton (left),OD,internal capsule,left
+25412,Mean OD in retrolenticular part of internal capsule on FA skeleton (right),OD,internal capsule,right
+25413,Mean OD in retrolenticular part of internal capsule on FA skeleton (left),OD,internal capsule,left
+25414,Mean OD in anterior corona radiata on FA skeleton (right),OD,corona radiata,right
+25415,Mean OD in anterior corona radiata on FA skeleton (left),OD,corona radiata,left
+25416,Mean OD in superior corona radiata on FA skeleton (right),OD,corona radiata,right
+25417,Mean OD in superior corona radiata on FA skeleton (left),OD,corona radiata,left
+25418,Mean OD in posterior corona radiata on FA skeleton (right),OD,corona radiata,right
+25419,Mean OD in posterior corona radiata on FA skeleton (left),OD,corona radiata,left
+25420,Mean OD in posterior thalamic radiation on FA skeleton (right),OD,thalamus,right
+25421,Mean OD in posterior thalamic radiation on FA skeleton (left),OD,thalamus,left
+25422,Mean OD in sagittal stratum on FA skeleton (right),OD,sagittal stratum,right
+25423,Mean OD in sagittal stratum on FA skeleton (left),OD,sagittal stratum,left
+25424,Mean OD in external capsule on FA skeleton (right),OD,external capsule,right
+25425,Mean OD in external capsule on FA skeleton (left),OD,external capsule,left
+25426,Mean OD in cingulum cingulate gyrus on FA skeleton (right),OD,cingulate   ,right
+25427,Mean OD in cingulum cingulate gyrus on FA skeleton (left),OD,cingulate   ,left
+25428,Mean OD in cingulum hippocampus on FA skeleton (right),OD,hippocampus,right
+25429,Mean OD in cingulum hippocampus on FA skeleton (left),OD,hippocampus,left
+25430,Mean OD in fornix cres+stria terminalis on FA skeleton (right),OD,fornix,right
+25431,Mean OD in fornix cres+stria terminalis on FA skeleton (left),OD,fornix,left
+25432,Mean OD in superior longitudinal fasciculus on FA skeleton (right),OD,longitudinal fasciculus,right
+25433,Mean OD in superior longitudinal fasciculus on FA skeleton (left),OD,longitudinal fasciculus,left
+25434,Mean OD in superior fronto-occipital fasciculus on FA skeleton (right),OD,occipital,right
+25435,Mean OD in superior fronto-occipital fasciculus on FA skeleton (left),OD,occipital,left
+25436,Mean OD in uncinate fasciculus on FA skeleton (right),OD,uncinate fasciculus,right
+25437,Mean OD in uncinate fasciculus on FA skeleton (left),OD,uncinate fasciculus,left
+25438,Mean OD in tapetum on FA skeleton (right),OD,corpus callosum,right
+25439,Mean OD in tapetum on FA skeleton (left),OD,corpus callosum,left
+25440,Mean ISOVF in middle cerebellar peduncle on FA skeleton,ISOVF,peduncle,NA
+25441,Mean ISOVF in pontine crossing tract on FA skeleton,ISOVF,pontine crossing tract,NA
+25442,Mean ISOVF in genu of corpus callosum on FA skeleton,ISOVF,corpus callosum,NA
+25443,Mean ISOVF in body of corpus callosum on FA skeleton,ISOVF,corpus callosum,NA
+25444,Mean ISOVF in splenium of corpus callosum on FA skeleton,ISOVF,corpus callosum,NA
+25445,Mean ISOVF in fornix on FA skeleton,ISOVF,fornix,NA
+25446,Mean ISOVF in corticospinal tract on FA skeleton (right),ISOVF,corticospinal tract,right
+25447,Mean ISOVF in corticospinal tract on FA skeleton (left),ISOVF,corticospinal tract,left
+25448,Mean ISOVF in medial lemniscus on FA skeleton (right),ISOVF,medial lemniscus,right
+25449,Mean ISOVF in medial lemniscus on FA skeleton (left),ISOVF,medial lemniscus,left
+25450,Mean ISOVF in inferior cerebellar peduncle on FA skeleton (right),ISOVF,peduncle,right
+25451,Mean ISOVF in inferior cerebellar peduncle on FA skeleton (left),ISOVF,peduncle,left
+25452,Mean ISOVF in superior cerebellar peduncle on FA skeleton (right),ISOVF,peduncle,right
+25453,Mean ISOVF in superior cerebellar peduncle on FA skeleton (left),ISOVF,peduncle,left
+25454,Mean ISOVF in cerebral peduncle on FA skeleton (right),ISOVF,peduncle,right
+25455,Mean ISOVF in cerebral peduncle on FA skeleton (left),ISOVF,peduncle,left
+25456,Mean ISOVF in anterior limb of internal capsule on FA skeleton (right),ISOVF,internal capsule,right
+25457,Mean ISOVF in anterior limb of internal capsule on FA skeleton (left),ISOVF,internal capsule,left
+25458,Mean ISOVF in posterior limb of internal capsule on FA skeleton (right),ISOVF,internal capsule,right
+25459,Mean ISOVF in posterior limb of internal capsule on FA skeleton (left),ISOVF,internal capsule,left
+25460,Mean ISOVF in retrolenticular part of internal capsule on FA skeleton (right),ISOVF,internal capsule,right
+25461,Mean ISOVF in retrolenticular part of internal capsule on FA skeleton (left),ISOVF,internal capsule,left
+25462,Mean ISOVF in anterior corona radiata on FA skeleton (right),ISOVF,corona radiata,right
+25463,Mean ISOVF in anterior corona radiata on FA skeleton (left),ISOVF,corona radiata,left
+25464,Mean ISOVF in superior corona radiata on FA skeleton (right),ISOVF,corona radiata,right
+25465,Mean ISOVF in superior corona radiata on FA skeleton (left),ISOVF,corona radiata,left
+25466,Mean ISOVF in posterior corona radiata on FA skeleton (right),ISOVF,corona radiata,right
+25467,Mean ISOVF in posterior corona radiata on FA skeleton (left),ISOVF,corona radiata,left
+25468,Mean ISOVF in posterior thalamic radiation on FA skeleton (right),ISOVF,thalamus,right
+25469,Mean ISOVF in posterior thalamic radiation on FA skeleton (left),ISOVF,thalamus,left
+25470,Mean ISOVF in sagittal stratum on FA skeleton (right),ISOVF,sagittal stratum,right
+25471,Mean ISOVF in sagittal stratum on FA skeleton (left),ISOVF,sagittal stratum,left
+25472,Mean ISOVF in external capsule on FA skeleton (right),ISOVF,external capsule,right
+25473,Mean ISOVF in external capsule on FA skeleton (left),ISOVF,external capsule,left
+25474,Mean ISOVF in cingulum cingulate gyrus on FA skeleton (right),ISOVF,cingulate   ,right
+25475,Mean ISOVF in cingulum cingulate gyrus on FA skeleton (left),ISOVF,cingulate   ,left
+25476,Mean ISOVF in cingulum hippocampus on FA skeleton (right),ISOVF,hippocampus,right
+25477,Mean ISOVF in cingulum hippocampus on FA skeleton (left),ISOVF,hippocampus,left
+25478,Mean ISOVF in fornix cres+stria terminalis on FA skeleton (right),ISOVF,fornix,right
+25479,Mean ISOVF in fornix cres+stria terminalis on FA skeleton (left),ISOVF,fornix,left
+25480,Mean ISOVF in superior longitudinal fasciculus on FA skeleton (right),ISOVF,longitudinal fasciculus,right
+25481,Mean ISOVF in superior longitudinal fasciculus on FA skeleton (left),ISOVF,longitudinal fasciculus,left
+25482,Mean ISOVF in superior fronto-occipital fasciculus on FA skeleton (right),ISOVF,occipital,right
+25483,Mean ISOVF in superior fronto-occipital fasciculus on FA skeleton (left),ISOVF,occipital,left
+25484,Mean ISOVF in uncinate fasciculus on FA skeleton (right),ISOVF,uncinate fasciculus,right
+25485,Mean ISOVF in uncinate fasciculus on FA skeleton (left),ISOVF,uncinate fasciculus,left
+25486,Mean ISOVF in tapetum on FA skeleton (right),ISOVF,corpus callosum,right
+25487,Mean ISOVF in tapetum on FA skeleton (left),ISOVF,corpus callosum,left
+25488,Weighted-mean FA in tract acoustic radiation (left),FA,acoustic radiation,left
+25489,Weighted-mean FA in tract acoustic radiation (right),FA,acoustic radiation,right
+25490,Weighted-mean FA in tract anterior thalamic radiation (left),FA,thalamus,left
+25491,Weighted-mean FA in tract anterior thalamic radiation (right),FA,thalamus,right
+25492,Weighted-mean FA in tract cingulate gyrus part of cingulum (left),FA,cingulate   ,left
+25493,Weighted-mean FA in tract cingulate gyrus part of cingulum (right),FA,cingulate   ,right
+25494,Weighted-mean FA in tract parahippocampal part of cingulum (left),FA,cingulum,left
+25495,Weighted-mean FA in tract parahippocampal part of cingulum (right),FA,cingulum,right
+25496,Weighted-mean FA in tract corticospinal tract (left),FA,corticospinal tract,left
+25497,Weighted-mean FA in tract corticospinal tract (right),FA,corticospinal tract,right
+25498,Weighted-mean FA in tract forceps major,FA,forceps major,NA
+25499,Weighted-mean FA in tract forceps minor,FA,forceps minor,NA
+25500,Weighted-mean FA in tract inferior fronto-occipital fasciculus (left),FA,occipital,left
+25501,Weighted-mean FA in tract inferior fronto-occipital fasciculus (right),FA,occipital,right
+25502,Weighted-mean FA in tract inferior longitudinal fasciculus (left),FA,longitudinal fasciculus,left
+25503,Weighted-mean FA in tract inferior longitudinal fasciculus (right),FA,longitudinal fasciculus,right
+25504,Weighted-mean FA in tract middle cerebellar peduncle,FA,peduncle,NA
+25505,Weighted-mean FA in tract medial lemniscus (left),FA,medial lemniscus,left
+25506,Weighted-mean FA in tract medial lemniscus (right),FA,medial lemniscus,right
+25507,Weighted-mean FA in tract posterior thalamic radiation (left),FA,thalamus,left
+25508,Weighted-mean FA in tract posterior thalamic radiation (right),FA,thalamus,right
+25509,Weighted-mean FA in tract superior longitudinal fasciculus (left),FA,longitudinal fasciculus,left
+25510,Weighted-mean FA in tract superior longitudinal fasciculus (right),FA,longitudinal fasciculus,right
+25511,Weighted-mean FA in tract superior thalamic radiation (left),FA,thalamus,left
+25512,Weighted-mean FA in tract superior thalamic radiation (right),FA,thalamus,right
+25513,Weighted-mean FA in tract uncinate fasciculus (left),FA,uncinate fasciculus,left
+25514,Weighted-mean FA in tract uncinate fasciculus (right),FA,uncinate fasciculus,right
+25515,Weighted-mean MD in tract acoustic radiation (left),MD,acoustic radiation,left
+25516,Weighted-mean MD in tract acoustic radiation (right),MD,acoustic radiation,right
+25517,Weighted-mean MD in tract anterior thalamic radiation (left),MD,thalamus,left
+25518,Weighted-mean MD in tract anterior thalamic radiation (right),MD,thalamus,right
+25519,Weighted-mean MD in tract cingulate gyrus part of cingulum (left),MD,cingulate   ,left
+25520,Weighted-mean MD in tract cingulate gyrus part of cingulum (right),MD,cingulate   ,right
+25521,Weighted-mean MD in tract parahippocampal part of cingulum (left),MD,cingulate   ,left
+25522,Weighted-mean MD in tract parahippocampal part of cingulum (right),MD,cingulate   ,right
+25523,Weighted-mean MD in tract corticospinal tract (left),MD,corticospinal tract,left
+25524,Weighted-mean MD in tract corticospinal tract (right),MD,corticospinal tract,right
+25525,Weighted-mean MD in tract forceps major,MD,forceps major,NA
+25526,Weighted-mean MD in tract forceps minor,MD,forceps minor,NA
+25527,Weighted-mean MD in tract inferior fronto-occipital fasciculus (left),MD,occipital,left
+25528,Weighted-mean MD in tract inferior fronto-occipital fasciculus (right),MD,occipital,right
+25529,Weighted-mean MD in tract inferior longitudinal fasciculus (left),MD,longitudinal fasciculus,left
+25530,Weighted-mean MD in tract inferior longitudinal fasciculus (right),MD,longitudinal fasciculus,right
+25531,Weighted-mean MD in tract middle cerebellar peduncle,MD,peduncle,NA
+25532,Weighted-mean MD in tract medial lemniscus (left),MD,medial lemniscus,left
+25533,Weighted-mean MD in tract medial lemniscus (right),MD,medial lemniscus,right
+25534,Weighted-mean MD in tract posterior thalamic radiation (left),MD,thalamus,left
+25535,Weighted-mean MD in tract posterior thalamic radiation (right),MD,thalamus,right
+25536,Weighted-mean MD in tract superior longitudinal fasciculus (left),MD,longitudinal fasciculus,left
+25537,Weighted-mean MD in tract superior longitudinal fasciculus (right),MD,longitudinal fasciculus,right
+25538,Weighted-mean MD in tract superior thalamic radiation (left),MD,thalamus,left
+25539,Weighted-mean MD in tract superior thalamic radiation (right),MD,thalamus,right
+25540,Weighted-mean MD in tract uncinate fasciculus (left),MD,uncinate fasciculus,left
+25541,Weighted-mean MD in tract uncinate fasciculus (right),MD,uncinate fasciculus,right
+25542,Weighted-mean MO in tract acoustic radiation (left),MO,acoustic radiation,left
+25543,Weighted-mean MO in tract acoustic radiation (right),MO,acoustic radiation,right
+25544,Weighted-mean MO in tract anterior thalamic radiation (left),MO,thalamus,left
+25545,Weighted-mean MO in tract anterior thalamic radiation (right),MO,thalamus,right
+25546,Weighted-mean MO in tract cingulate gyrus part of cingulum (left),MO,cingulate   ,left
+25547,Weighted-mean MO in tract cingulate gyrus part of cingulum (right),MO,cingulate   ,right
+25548,Weighted-mean MO in tract parahippocampal part of cingulum (left),MO,cingulum,left
+25549,Weighted-mean MO in tract parahippocampal part of cingulum (right),MO,cingulum,right
+25550,Weighted-mean MO in tract corticospinal tract (left),MO,corticospinal tract,left
+25551,Weighted-mean MO in tract corticospinal tract (right),MO,corticospinal tract,right
+25552,Weighted-mean MO in tract forceps major,MO,forceps major,NA
+25553,Weighted-mean MO in tract forceps minor,MO,forceps minor,NA
+25554,Weighted-mean MO in tract inferior fronto-occipital fasciculus (left),MO,occipital,left
+25555,Weighted-mean MO in tract inferior fronto-occipital fasciculus (right),MO,occipital,right
+25556,Weighted-mean MO in tract inferior longitudinal fasciculus (left),MO,longitudinal fasciculus,left
+25557,Weighted-mean MO in tract inferior longitudinal fasciculus (right),MO,longitudinal fasciculus,right
+25558,Weighted-mean MO in tract middle cerebellar peduncle,MO,peduncle,NA
+25559,Weighted-mean MO in tract medial lemniscus (left),MO,medial lemniscus,left
+25560,Weighted-mean MO in tract medial lemniscus (right),MO,medial lemniscus,right
+25561,Weighted-mean MO in tract posterior thalamic radiation (left),MO,thalamus,left
+25562,Weighted-mean MO in tract posterior thalamic radiation (right),MO,thalamus,right
+25563,Weighted-mean MO in tract superior longitudinal fasciculus (left),MO,longitudinal fasciculus,left
+25564,Weighted-mean MO in tract superior longitudinal fasciculus (right),MO,longitudinal fasciculus,right
+25565,Weighted-mean MO in tract superior thalamic radiation (left),MO,thalamus,left
+25566,Weighted-mean MO in tract superior thalamic radiation (right),MO,thalamus,right
+25567,Weighted-mean MO in tract uncinate fasciculus (left),MO,uncinate fasciculus,left
+25568,Weighted-mean MO in tract uncinate fasciculus (right),MO,uncinate fasciculus,right
+25650,Weighted-mean ICVF in tract acoustic radiation (left),ICVF,acoustic radiation,left
+25651,Weighted-mean ICVF in tract acoustic radiation (right),ICVF,acoustic radiation,right
+25652,Weighted-mean ICVF in tract anterior thalamic radiation (left),ICVF,thalamus,left
+25653,Weighted-mean ICVF in tract anterior thalamic radiation (right),ICVF,thalamus,right
+25654,Weighted-mean ICVF in tract cingulate gyrus part of cingulum (left),ICVF,cingulate   ,left
+25655,Weighted-mean ICVF in tract cingulate gyrus part of cingulum (right),ICVF,cingulate   ,right
+25656,Weighted-mean ICVF in tract parahippocampal part of cingulum (left),ICVF,cingulum,left
+25657,Weighted-mean ICVF in tract parahippocampal part of cingulum (right),ICVF,cingulum,right
+25658,Weighted-mean ICVF in tract corticospinal tract (left),ICVF,corticospinal tract,left
+25659,Weighted-mean ICVF in tract corticospinal tract (right),ICVF,corticospinal tract,right
+25660,Weighted-mean ICVF in tract forceps major,ICVF,forceps major,NA
+25661,Weighted-mean ICVF in tract forceps minor,ICVF,forceps minor,NA
+25662,Weighted-mean ICVF in tract inferior fronto-occipital fasciculus (left),ICVF,occipital,left
+25663,Weighted-mean ICVF in tract inferior fronto-occipital fasciculus (right),ICVF,occipital,right
+25664,Weighted-mean ICVF in tract inferior longitudinal fasciculus (left),ICVF,longitudinal fasciculus,left
+25665,Weighted-mean ICVF in tract inferior longitudinal fasciculus (right),ICVF,longitudinal fasciculus,right
+25666,Weighted-mean ICVF in tract middle cerebellar peduncle,ICVF,peduncle,NA
+25667,Weighted-mean ICVF in tract medial lemniscus (left),ICVF,medial lemniscus,left
+25668,Weighted-mean ICVF in tract medial lemniscus (right),ICVF,medial lemniscus,right
+25669,Weighted-mean ICVF in tract posterior thalamic radiation (left),ICVF,thalamus,left
+25670,Weighted-mean ICVF in tract posterior thalamic radiation (right),ICVF,thalamus,right
+25671,Weighted-mean ICVF in tract superior longitudinal fasciculus (left),ICVF,longitudinal fasciculus,left
+25672,Weighted-mean ICVF in tract superior longitudinal fasciculus (right),ICVF,longitudinal fasciculus,right
+25673,Weighted-mean ICVF in tract superior thalamic radiation (left),ICVF,thalamus,left
+25674,Weighted-mean ICVF in tract superior thalamic radiation (right),ICVF,thalamus,right
+25675,Weighted-mean ICVF in tract uncinate fasciculus (left),ICVF,uncinate fasciculus,left
+25676,Weighted-mean ICVF in tract uncinate fasciculus (right),ICVF,uncinate fasciculus,right
+25677,Weighted-mean OD in tract acoustic radiation (left),OD,acoustic radiation,left
+25678,Weighted-mean OD in tract acoustic radiation (right),OD,acoustic radiation,right
+25679,Weighted-mean OD in tract anterior thalamic radiation (left),OD,thalamus,left
+25680,Weighted-mean OD in tract anterior thalamic radiation (right),OD,thalamus,right
+25681,Weighted-mean OD in tract cingulate gyrus part of cingulum (left),OD,cingulate   ,left
+25682,Weighted-mean OD in tract cingulate gyrus part of cingulum (right),OD,cingulate   ,right
+25683,Weighted-mean OD in tract parahippocampal part of cingulum (left),OD,cingulum,left
+25684,Weighted-mean OD in tract parahippocampal part of cingulum (right),OD,cingulum,right
+25685,Weighted-mean OD in tract corticospinal tract (left),OD,corticospinal tract,left
+25686,Weighted-mean OD in tract corticospinal tract (right),OD,corticospinal tract,right
+25687,Weighted-mean OD in tract forceps major,OD,forceps major,NA
+25688,Weighted-mean OD in tract forceps minor,OD,forceps minor,NA
+25689,Weighted-mean OD in tract inferior fronto-occipital fasciculus (left),OD,occipital,left
+25690,Weighted-mean OD in tract inferior fronto-occipital fasciculus (right),OD,occipital,right
+25691,Weighted-mean OD in tract inferior longitudinal fasciculus (left),OD,longitudinal fasciculus,left
+25692,Weighted-mean OD in tract inferior longitudinal fasciculus (right),OD,longitudinal fasciculus,right
+25693,Weighted-mean OD in tract middle cerebellar peduncle,OD,peduncle,NA
+25694,Weighted-mean OD in tract medial lemniscus (left),OD,medial lemniscus,left
+25695,Weighted-mean OD in tract medial lemniscus (right),OD,medial lemniscus,right
+25696,Weighted-mean OD in tract posterior thalamic radiation (left),OD,thalamus,left
+25697,Weighted-mean OD in tract posterior thalamic radiation (right),OD,thalamus,right
+25698,Weighted-mean OD in tract superior longitudinal fasciculus (left),OD,longitudinal fasciculus,left
+25699,Weighted-mean OD in tract superior longitudinal fasciculus (right),OD,longitudinal fasciculus,right
+25700,Weighted-mean OD in tract superior thalamic radiation (left),OD,thalamus,left
+25701,Weighted-mean OD in tract superior thalamic radiation (right),OD,thalamus,right
+25702,Weighted-mean OD in tract uncinate fasciculus (left),OD,uncinate fasciculus,left
+25703,Weighted-mean OD in tract uncinate fasciculus (right),OD,uncinate fasciculus,right
+25704,Weighted-mean ISOVF in tract acoustic radiation (left),ISOVF,acoustic radiation,left
+25705,Weighted-mean ISOVF in tract acoustic radiation (right),ISOVF,acoustic radiation,right
+25706,Weighted-mean ISOVF in tract anterior thalamic radiation (left),ISOVF,thalamus,left
+25707,Weighted-mean ISOVF in tract anterior thalamic radiation (right),ISOVF,thalamus,right
+25708,Weighted-mean ISOVF in tract cingulate gyrus part of cingulum (left),ISOVF,cingulate   ,left
+25709,Weighted-mean ISOVF in tract cingulate gyrus part of cingulum (right),ISOVF,cingulate   ,right
+25710,Weighted-mean ISOVF in tract parahippocampal part of cingulum (left),ISOVF,cingulum,left
+25711,Weighted-mean ISOVF in tract parahippocampal part of cingulum (right),ISOVF,cingulum,right
+25712,Weighted-mean ISOVF in tract corticospinal tract (left),ISOVF,corticospinal tract,left
+25713,Weighted-mean ISOVF in tract corticospinal tract (right),ISOVF,corticospinal tract,right
+25714,Weighted-mean ISOVF in tract forceps major,ISOVF,forceps major,NA
+25715,Weighted-mean ISOVF in tract forceps minor,ISOVF,forceps minor,NA
+25716,Weighted-mean ISOVF in tract inferior fronto-occipital fasciculus (left),ISOVF,occipital,left
+25717,Weighted-mean ISOVF in tract inferior fronto-occipital fasciculus (right),ISOVF,occipital,right
+25718,Weighted-mean ISOVF in tract inferior longitudinal fasciculus (left),ISOVF,longitudinal fasciculus,left
+25719,Weighted-mean ISOVF in tract inferior longitudinal fasciculus (right),ISOVF,longitudinal fasciculus,right
+25720,Weighted-mean ISOVF in tract middle cerebellar peduncle,ISOVF,peduncle,NA
+25721,Weighted-mean ISOVF in tract medial lemniscus (left),ISOVF,medial lemniscus,left
+25722,Weighted-mean ISOVF in tract medial lemniscus (right),ISOVF,medial lemniscus,right
+25723,Weighted-mean ISOVF in tract posterior thalamic radiation (left),ISOVF,thalamus,left
+25724,Weighted-mean ISOVF in tract posterior thalamic radiation (right),ISOVF,thalamus,right
+25725,Weighted-mean ISOVF in tract superior longitudinal fasciculus (left),ISOVF,longitudinal fasciculus,left
+25726,Weighted-mean ISOVF in tract superior longitudinal fasciculus (right),ISOVF,longitudinal fasciculus,right
+25727,Weighted-mean ISOVF in tract superior thalamic radiation (left),ISOVF,thalamus,left
+25728,Weighted-mean ISOVF in tract superior thalamic radiation (right),ISOVF,thalamus,right
+25729,Weighted-mean ISOVF in tract uncinate fasciculus (left),ISOVF,uncinate fasciculus,left
+25730,Weighted-mean ISOVF in tract uncinate fasciculus (right),ISOVF,uncinate fasciculus,right
+25782,Volume of grey matter in Frontal Pole (left),Regional grey matter,frontal,left
+25783,Volume of grey matter in Frontal Pole (right),Regional grey matter,frontal,right
+25784,Volume of grey matter in Insular Cortex (left),Regional grey matter,insula,left
+25785,Volume of grey matter in Insular Cortex (right),Regional grey matter,insula,right
+25786,Volume of grey matter in Superior Frontal Gyrus (left),Regional grey matter,frontal,left
+25787,Volume of grey matter in Superior Frontal Gyrus (right),Regional grey matter,frontal,right
+25788,Volume of grey matter in Middle Frontal Gyrus (left),Regional grey matter,frontal,left
+25789,Volume of grey matter in Middle Frontal Gyrus (right),Regional grey matter,frontal,right
+25790,"Volume of grey matter in Inferior Frontal Gyrus, pars triangularis (left)",Regional grey matter,frontal,left
+25791,"Volume of grey matter in Inferior Frontal Gyrus, pars triangularis (right)",Regional grey matter,frontal,right
+25792,"Volume of grey matter in Inferior Frontal Gyrus, pars opercularis (left)",Regional grey matter,frontal,left
+25793,"Volume of grey matter in Inferior Frontal Gyrus, pars opercularis (right)",Regional grey matter,frontal,right
+25794,Volume of grey matter in Precentral Gyrus (left),Regional grey matter,precentral,left
+25795,Volume of grey matter in Precentral Gyrus (right),Regional grey matter,precentral,right
+25796,Volume of grey matter in Temporal Pole (left),Regional grey matter,temporal,left
+25797,Volume of grey matter in Temporal Pole (right),Regional grey matter,temporal,right
+25798,"Volume of grey matter in Superior Temporal Gyrus, anterior division (left)",Regional grey matter,temporal,left
+25799,"Volume of grey matter in Superior Temporal Gyrus, anterior division (right)",Regional grey matter,temporal,right
+25800,"Volume of grey matter in Superior Temporal Gyrus, posterior division (left)",Regional grey matter,temporal,left
+25801,"Volume of grey matter in Superior Temporal Gyrus, posterior division (right)",Regional grey matter,temporal,right
+25802,"Volume of grey matter in Middle Temporal Gyrus, anterior division (left)",Regional grey matter,temporal,left
+25803,"Volume of grey matter in Middle Temporal Gyrus, anterior division (right)",Regional grey matter,temporal,right
+25804,"Volume of grey matter in Middle Temporal Gyrus, posterior division (left)",Regional grey matter,temporal,left
+25805,"Volume of grey matter in Middle Temporal Gyrus, posterior division (right)",Regional grey matter,temporal,right
+25806,"Volume of grey matter in Middle Temporal Gyrus, temporooccipital part (left)",Regional grey matter,temporal,left
+25807,"Volume of grey matter in Middle Temporal Gyrus, temporooccipital part (right)",Regional grey matter,temporal,right
+25808,"Volume of grey matter in Inferior Temporal Gyrus, anterior division (left)",Regional grey matter,temporal,left
+25809,"Volume of grey matter in Inferior Temporal Gyrus, anterior division (right)",Regional grey matter,temporal,right
+25810,"Volume of grey matter in Inferior Temporal Gyrus, posterior division (left)",Regional grey matter,temporal,left
+25811,"Volume of grey matter in Inferior Temporal Gyrus, posterior division (right)",Regional grey matter,temporal,right
+25812,"Volume of grey matter in Inferior Temporal Gyrus, temporooccipital part (left)",Regional grey matter,temporal,left
+25813,"Volume of grey matter in Inferior Temporal Gyrus, temporooccipital part (right)",Regional grey matter,temporal,right
+25814,Volume of grey matter in Postcentral Gyrus (left),Regional grey matter,parietal,left
+25815,Volume of grey matter in Postcentral Gyrus (right),Regional grey matter,parietal,right
+25816,Volume of grey matter in Superior Parietal Lobule (left),Regional grey matter,parietal,left
+25817,Volume of grey matter in Superior Parietal Lobule (right),Regional grey matter,parietal,right
+25818,"Volume of grey matter in Supramarginal Gyrus, anterior division (left)",Regional grey matter,parietal,left
+25819,"Volume of grey matter in Supramarginal Gyrus, anterior division (right)",Regional grey matter,parietal,right
+25820,"Volume of grey matter in Supramarginal Gyrus, posterior division (left)",Regional grey matter,parietal,left
+25821,"Volume of grey matter in Supramarginal Gyrus, posterior division (right)",Regional grey matter,parietal,right
+25822,Volume of grey matter in Angular Gyrus (left),Regional grey matter,parietal,left
+25823,Volume of grey matter in Angular Gyrus (right),Regional grey matter,parietal,right
+25824,"Volume of grey matter in Lateral Occipital Cortex, superior division (left)",Regional grey matter,occipital,left
+25825,"Volume of grey matter in Lateral Occipital Cortex, superior division (right)",Regional grey matter,occipital,right
+25826,"Volume of grey matter in Lateral Occipital Cortex, inferior division (left)",Regional grey matter,occipital,left
+25827,"Volume of grey matter in Lateral Occipital Cortex, inferior division (right)",Regional grey matter,occipital,right
+25828,Volume of grey matter in Intracalcarine Cortex (left),Regional grey matter,occipital,left
+25829,Volume of grey matter in Intracalcarine Cortex (right),Regional grey matter,occipital,right
+25830,Volume of grey matter in Frontal Medial Cortex (left),Regional grey matter,frontal,left
+25831,Volume of grey matter in Frontal Medial Cortex (right),Regional grey matter,frontal,right
+25832,Volume of grey matter in Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex) (left),Regional grey matter,SMA,left
+25833,Volume of grey matter in Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex) (right),Regional grey matter,SMA,right
+25834,Volume of grey matter in Subcallosal Cortex (left),Regional grey matter,cingulum,left
+25835,Volume of grey matter in Subcallosal Cortex (right),Regional grey matter,cingulum,right
+25836,Volume of grey matter in Paracingulate Gyrus (left),Regional grey matter,cingulate   ,left
+25837,Volume of grey matter in Paracingulate Gyrus (right),Regional grey matter,cingulate   ,right
+25838,"Volume of grey matter in Cingulate Gyrus, anterior division (left)",Regional grey matter,cingulate   ,left
+25839,"Volume of grey matter in Cingulate Gyrus, anterior division (right)",Regional grey matter,cingulate   ,right
+25840,"Volume of grey matter in Cingulate Gyrus, posterior division (left)",Regional grey matter,cingulate   ,left
+25841,"Volume of grey matter in Cingulate Gyrus, posterior division (right)",Regional grey matter,cingulate   ,right
+25842,Volume of grey matter in Precuneous Cortex (left),Regional grey matter,parietal,left
+25843,Volume of grey matter in Precuneous Cortex (right),Regional grey matter,parietal,right
+25844,Volume of grey matter in Cuneal Cortex (left),Regional grey matter,occipital,left
+25845,Volume of grey matter in Cuneal Cortex (right),Regional grey matter,occipital,right
+25846,Volume of grey matter in Frontal Orbital Cortex (left),Regional grey matter,frontal,left
+25847,Volume of grey matter in Frontal Orbital Cortex (right),Regional grey matter,frontal,right
+25848,"Volume of grey matter in Parahippocampal Gyrus, anterior division (left)",Regional grey matter,parahippocampal,left
+25849,"Volume of grey matter in Parahippocampal Gyrus, anterior division (right)",Regional grey matter,parahippocampal,right
+25850,"Volume of grey matter in Parahippocampal Gyrus, posterior division (left)",Regional grey matter,parahippocampal,left
+25851,"Volume of grey matter in Parahippocampal Gyrus, posterior division (right)",Regional grey matter,parahippocampal,right
+25852,Volume of grey matter in Lingual Gyrus (left),Regional grey matter,occipital,left
+25853,Volume of grey matter in Lingual Gyrus (right),Regional grey matter,occipital,right
+25854,"Volume of grey matter in Temporal Fusiform Cortex, anterior division (left)",Regional grey matter,temporal,left
+25855,"Volume of grey matter in Temporal Fusiform Cortex, anterior division (right)",Regional grey matter,temporal,right
+25856,"Volume of grey matter in Temporal Fusiform Cortex, posterior division (left)",Regional grey matter,temporal,left
+25857,"Volume of grey matter in Temporal Fusiform Cortex, posterior division (right)",Regional grey matter,temporal,right
+25858,Volume of grey matter in Temporal Occipital Fusiform Cortex (left),Regional grey matter,temporal,left
+25859,Volume of grey matter in Temporal Occipital Fusiform Cortex (right),Regional grey matter,temporal,right
+25860,Volume of grey matter in Occipital Fusiform Gyrus (left),Regional grey matter,occipital,left
+25861,Volume of grey matter in Occipital Fusiform Gyrus (right),Regional grey matter,occipital,right
+25862,Volume of grey matter in Frontal Operculum Cortex (left),Regional grey matter,frontal,left
+25863,Volume of grey matter in Frontal Operculum Cortex (right),Regional grey matter,frontal,right
+25864,Volume of grey matter in Central Opercular Cortex (left),Regional grey matter,insula,left
+25865,Volume of grey matter in Central Opercular Cortex (right),Regional grey matter,insula,right
+25866,Volume of grey matter in Parietal Operculum Cortex (left),Regional grey matter,parietal,left
+25867,Volume of grey matter in Parietal Operculum Cortex (right),Regional grey matter,parietal,right
+25868,Volume of grey matter in Planum Polare (left),Regional grey matter,temporal,left
+25869,Volume of grey matter in Planum Polare (right),Regional grey matter,temporal,right
+25870,Volume of grey matter in Heschl's Gyrus (includes H1 and H2) (left),Regional grey matter,temporal,left
+25871,Volume of grey matter in Heschl's Gyrus (includes H1 and H2) (right),Regional grey matter,temporal,right
+25872,Volume of grey matter in Planum Temporale (left),Regional grey matter,temporal,left
+25873,Volume of grey matter in Planum Temporale (right),Regional grey matter,temporal,right
+25874,Volume of grey matter in Supracalcarine Cortex (left),Regional grey matter,occipital,left
+25875,Volume of grey matter in Supracalcarine Cortex (right),Regional grey matter,occipital,right
+25876,Volume of grey matter in Occipital Pole (left),Regional grey matter,occipital,left
+25877,Volume of grey matter in Occipital Pole (right),Regional grey matter,occipital,right
+25878,Volume of grey matter in Thalamus (left),Regional grey matter,thalamus,left
+25879,Volume of grey matter in Thalamus (right),Regional grey matter,thalamus,right
+25880,Volume of grey matter in Caudate (left),Regional grey matter,caudate,left
+25881,Volume of grey matter in Caudate (right),Regional grey matter,caudate,right
+25882,Volume of grey matter in Putamen (left),Regional grey matter,putamen,left
+25883,Volume of grey matter in Putamen (right),Regional grey matter,putamen,right
+25884,Volume of grey matter in Pallidum (left),Regional grey matter,pallidum,left
+25885,Volume of grey matter in Pallidum (right),Regional grey matter,pallidum,right
+25886,Volume of grey matter in Hippocampus (left),Regional grey matter,hippocampus,left
+25887,Volume of grey matter in Hippocampus (right),Regional grey matter,hippocampus,right
+25888,Volume of grey matter in Amygdala (left),Regional grey matter,amygdala,left
+25889,Volume of grey matter in Amygdala (right),Regional grey matter,amygdala,right
+25890,Volume of grey matter in Ventral Striatum (left),Regional grey matter,striatum,left
+25891,Volume of grey matter in Ventral Striatum (right),Regional grey matter,striatum,right
+25892,Volume of grey matter in Brain-Stem,Regional grey matter,brainstem,NA
+25893,Volume of grey matter in I-IV Cerebellum (left),Regional grey matter,cerebellum,left
+25894,Volume of grey matter in I-IV Cerebellum (right),Regional grey matter,cerebellum,right
+25895,Volume of grey matter in V Cerebellum (left),Regional grey matter,cerebellum,left
+25896,Volume of grey matter in V Cerebellum (right),Regional grey matter,cerebellum,right
+25897,Volume of grey matter in VI Cerebellum (left),Regional grey matter,cerebellum,left
+25898,Volume of grey matter in VI Cerebellum (vermis),Regional grey matter,cerebellum,NA
+25899,Volume of grey matter in VI Cerebellum (right),Regional grey matter,cerebellum,right
+25900,Volume of grey matter in Crus I Cerebellum (left),Regional grey matter,cerebellum,left
+25901,Volume of grey matter in Crus I Cerebellum (vermis),Regional grey matter,cerebellum,NA
+25902,Volume of grey matter in Crus I Cerebellum (right),Regional grey matter,cerebellum,right
+25903,Volume of grey matter in Crus II Cerebellum (left),Regional grey matter,cerebellum,left
+25904,Volume of grey matter in Crus II Cerebellum (vermis),Regional grey matter,cerebellum,NA
+25905,Volume of grey matter in Crus II Cerebellum (right),Regional grey matter,cerebellum,right
+25906,Volume of grey matter in VIIb Cerebellum (left),Regional grey matter,cerebellum,left
+25907,Volume of grey matter in VIIb Cerebellum (vermis),Regional grey matter,cerebellum,NA
+25908,Volume of grey matter in VIIb Cerebellum (right),Regional grey matter,cerebellum,right
+25909,Volume of grey matter in VIIIa Cerebellum (left),Regional grey matter,cerebellum,left
+25910,Volume of grey matter in VIIIa Cerebellum (vermis),Regional grey matter,cerebellum,NA
+25911,Volume of grey matter in VIIIa Cerebellum (right),Regional grey matter,cerebellum,right
+25912,Volume of grey matter in VIIIb Cerebellum (left),Regional grey matter,cerebellum,left
+25913,Volume of grey matter in VIIIb Cerebellum (vermis),Regional grey matter,cerebellum,NA
+25914,Volume of grey matter in VIIIb Cerebellum (right),Regional grey matter,cerebellum,right
+25915,Volume of grey matter in IX Cerebellum (left),Regional grey matter,cerebellum,left
+25916,Volume of grey matter in IX Cerebellum (vermis),Regional grey matter,cerebellum,NA
+25917,Volume of grey matter in IX Cerebellum (right),Regional grey matter,cerebellum,right
+25918,Volume of grey matter in X Cerebellum (left),Regional grey matter,cerebellum,left
+25919,Volume of grey matter in X Cerebellum (vermis),Regional grey matter,cerebellum,NA
+25920,Volume of grey matter in X Cerebellum (right),Regional grey matter,cerebellum,right
+26600,Volume of Lateral-nucleus (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26601,Volume of Basal-nucleus (left hemisphere),Freesurfer subsegmentation,amygdala,left
+26602,Volume of Accessory-Basal-nucleus (left hemisphere),Freesurfer subsegmentation,amygdala,left
+26603,Volume of Anterior-amygdaloid-area-AAA (left hemisphere),Freesurfer subsegmentation,amygdala,left
+26604,Volume of Central-nucleus (left hemisphere),Freesurfer subsegmentation,amygdala,left
+26605,Volume of Medial-nucleus (left hemisphere),Freesurfer subsegmentation,amygdala,left
+26606,Volume of Cortical-nucleus (left hemisphere),Freesurfer subsegmentation,amygdala,left
+26607,Volume of Corticoamygdaloid-transitio (left hemisphere),Freesurfer subsegmentation,amygdala,left
+26608,Volume of Paralaminar-nucleus (left hemisphere),Freesurfer subsegmentation,amygdala,left
+26609,Volume of Whole-amygdala (left hemisphere),Freesurfer subsegmentation,amygdala,left
+26610,Volume of Lateral-nucleus (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26611,Volume of Basal-nucleus (right hemisphere),Freesurfer subsegmentation,amygdala,right
+26612,Volume of Accessory-Basal-nucleus (right hemisphere),Freesurfer subsegmentation,amygdala,right
+26613,Volume of Anterior-amygdaloid-area-AAA (right hemisphere),Freesurfer subsegmentation,amygdala,right
+26614,Volume of Central-nucleus (right hemisphere),Freesurfer subsegmentation,amygdala,right
+26615,Volume of Medial-nucleus (right hemisphere),Freesurfer subsegmentation,amygdala,right
+26616,Volume of Cortical-nucleus (right hemisphere),Freesurfer subsegmentation,amygdala,right
+26617,Volume of Corticoamygdaloid-transitio (right hemisphere),Freesurfer subsegmentation,amygdala,right
+26618,Volume of Paralaminar-nucleus (right hemisphere),Freesurfer subsegmentation,amygdala,right
+26619,Volume of Whole-amygdala (right hemisphere),Freesurfer subsegmentation,amygdala,right
+26620,Volume of Hippocampal-tail (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26621,Volume of subiculum-body (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26622,Volume of CA1-body (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26623,Volume of subiculum-head (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26624,Volume of hippocampal-fissure (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26625,Volume of presubiculum-head (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26626,Volume of CA1-head (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26627,Volume of presubiculum-body (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26628,Volume of parasubiculum (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26629,Volume of molecular-layer-HP-head (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26630,Volume of molecular-layer-HP-body (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26631,Volume of GC-ML-DG-head (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26632,Volume of CA3-body (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26633,Volume of GC-ML-DG-body (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26634,Volume of CA4-head (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26635,Volume of CA4-body (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26636,Volume of fimbria (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26637,Volume of CA3-head (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26638,Volume of HATA (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26639,Volume of Whole-hippocampal-body (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26640,Volume of Whole-hippocampal-head (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26641,Volume of Whole-hippocampus (left hemisphere),Freesurfer subsegmentation,hippocampus,left
+26642,Volume of Hippocampal-tail (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26643,Volume of subiculum-body (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26644,Volume of CA1-body (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26645,Volume of subiculum-head (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26646,Volume of hippocampal-fissure (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26647,Volume of presubiculum-head (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26648,Volume of CA1-head (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26649,Volume of presubiculum-body (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26650,Volume of parasubiculum (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26651,Volume of molecular-layer-HP-head (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26652,Volume of molecular-layer-HP-body (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26653,Volume of GC-ML-DG-head (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26654,Volume of CA3-body (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26655,Volume of GC-ML-DG-body (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26656,Volume of CA4-head (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26657,Volume of CA4-body (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26658,Volume of fimbria (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26659,Volume of CA3-head (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26660,Volume of HATA (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26661,Volume of Whole-hippocampal-body (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26662,Volume of Whole-hippocampal-head (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26663,Volume of Whole-hippocampus (right hemisphere),Freesurfer subsegmentation,hippocampus,right
+26664,Volume of MGN (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26665,Volume of LGN (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26666,Volume of PuI (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26667,Volume of PuM (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26668,Volume of L-Sg (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26669,Volume of VPL (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26670,Volume of CM (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26671,Volume of VLa (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26672,Volume of PuA (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26673,Volume of MDm (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26674,Volume of Pf (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26675,Volume of VAmc (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26676,Volume of MDl (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26677,Volume of CeM (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26678,Volume of VA (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26679,Volume of MV(Re) (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26680,Volume of VM (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26681,Volume of CL (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26682,Volume of PuL (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26683,Volume of Pt (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26684,Volume of AV (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26685,Volume of Pc (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26686,Volume of VLp (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26687,Volume of LP (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26688,Volume of LGN (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26689,Volume of MGN (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26690,Volume of PuI (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26691,Volume of PuM (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26692,Volume of L-Sg (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26693,Volume of VPL (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26694,Volume of CM (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26695,Volume of VLa (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26696,Volume of PuA (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26697,Volume of MDm (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26698,Volume of Pf (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26699,Volume of VAmc (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26700,Volume of MDl (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26701,Volume of VA (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26702,Volume of MV(Re) (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26703,Volume of CeM (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26704,Volume of VM (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26705,Volume of PuL (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26706,Volume of CL (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26707,Volume of VLp (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26708,Volume of Pc (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26709,Volume of Pt (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26710,Volume of AV (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26711,Volume of LP (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26712,Volume of LD (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26713,Volume of LD (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26714,Volume of Whole-thalamus (left hemisphere),Freesurfer subsegmentation,thalamus,left
+26715,Volume of Whole-thalamus (right hemisphere),Freesurfer subsegmentation,thalamus,right
+26716,Volume of Medulla (whole brain),Freesurfer subsegmentation,brainstem,NA
+26717,Volume of Pons (whole brain),Freesurfer subsegmentation,brainstem,NA
+26718,Volume of SCP (whole brain),Freesurfer subsegmentation,brainstem,NA
+26719,Volume of Midbrain (whole brain),Freesurfer subsegmentation,brainstem,NA
+26720,Volume of Whole-brainstem (whole brain),Freesurfer subsegmentation,brainstem,NA
+27143,Area of caudalanteriorcingulate (left hemisphere),Freesurfer DKT,cingulate   ,left
+27144,Area of caudalmiddlefrontal (left hemisphere),Freesurfer DKT,frontal,left
+27145,Area of cuneus (left hemisphere),Freesurfer DKT,occipital,left
+27146,Area of entorhinal (left hemisphere),Freesurfer DKT,temporal,left
+27147,Area of fusiform (left hemisphere),Freesurfer DKT,fusiform,left
+27148,Area of inferiorparietal (left hemisphere),Freesurfer DKT,parietal,left
+27149,Area of inferiortemporal (left hemisphere),Freesurfer DKT,temporal,left
+27150,Area of isthmuscingulate (left hemisphere),Freesurfer DKT,cingulate   ,left
+27151,Area of lateraloccipital (left hemisphere),Freesurfer DKT,occipital,left
+27152,Area of lateralorbitofrontal (left hemisphere),Freesurfer DKT,frontal,left
+27153,Area of lingual (left hemisphere),Freesurfer DKT,occipital,left
+27154,Area of medialorbitofrontal (left hemisphere),Freesurfer DKT,frontal,left
+27155,Area of middletemporal (left hemisphere),Freesurfer DKT,temporal,left
+27156,Area of parahippocampal (left hemisphere),Freesurfer DKT,parahippocampal,left
+27157,Area of paracentral (left hemisphere),Freesurfer DKT,paracentral,left
+27158,Area of parsopercularis (left hemisphere),Freesurfer DKT,frontal,left
+27159,Area of parsorbitalis (left hemisphere),Freesurfer DKT,frontal,left
+27160,Area of parstriangularis (left hemisphere),Freesurfer DKT,frontal,left
+27161,Area of pericalcarine (left hemisphere),Freesurfer DKT,parietal,left
+27162,Area of postcentral (left hemisphere),Freesurfer DKT,parietal,left
+27163,Area of posteriorcingulate (left hemisphere),Freesurfer DKT,cingulate   ,left
+27164,Area of precentral (left hemisphere),Freesurfer DKT,precentral,left
+27165,Area of precuneus (left hemisphere),Freesurfer DKT,occipital,left
+27166,Area of rostralanteriorcingulate (left hemisphere),Freesurfer DKT,cingulate   ,left
+27167,Area of rostralmiddlefrontal (left hemisphere),Freesurfer DKT,frontal,left
+27168,Area of superiorfrontal (left hemisphere),Freesurfer DKT,frontal,left
+27169,Area of superiorparietal (left hemisphere),Freesurfer DKT,parietal,left
+27170,Area of superiortemporal (left hemisphere),Freesurfer DKT,temporal,left
+27171,Area of supramarginal (left hemisphere),Freesurfer DKT,parietal,left
+27172,Area of transversetemporal (left hemisphere),Freesurfer DKT,temporal,left
+27173,Area of insula (left hemisphere),Freesurfer DKT,insula,left
+27174,Mean thickness of caudalanteriorcingulate (left hemisphere),Freesurfer DKT,cingulate   ,left
+27175,Mean thickness of caudalmiddlefrontal (left hemisphere),Freesurfer DKT,frontal,left
+27176,Mean thickness of cuneus (left hemisphere),Freesurfer DKT,occipital,left
+27177,Mean thickness of entorhinal (left hemisphere),Freesurfer DKT,temporal,left
+27178,Mean thickness of fusiform (left hemisphere),Freesurfer DKT,fusiform,left
+27179,Mean thickness of inferiorparietal (left hemisphere),Freesurfer DKT,parietal,left
+27180,Mean thickness of inferiortemporal (left hemisphere),Freesurfer DKT,temporal,left
+27181,Mean thickness of isthmuscingulate (left hemisphere),Freesurfer DKT,cingulate   ,left
+27182,Mean thickness of lateraloccipital (left hemisphere),Freesurfer DKT,occipital,left
+27183,Mean thickness of lateralorbitofrontal (left hemisphere),Freesurfer DKT,frontal,left
+27184,Mean thickness of lingual (left hemisphere),Freesurfer DKT,occipital,left
+27185,Mean thickness of medialorbitofrontal (left hemisphere),Freesurfer DKT,frontal,left
+27186,Mean thickness of middletemporal (left hemisphere),Freesurfer DKT,temporal,left
+27187,Mean thickness of parahippocampal (left hemisphere),Freesurfer DKT,parahippocampal,left
+27188,Mean thickness of paracentral (left hemisphere),Freesurfer DKT,paracentral,left
+27189,Mean thickness of parsopercularis (left hemisphere),Freesurfer DKT,frontal,left
+27190,Mean thickness of parsorbitalis (left hemisphere),Freesurfer DKT,frontal,left
+27191,Mean thickness of parstriangularis (left hemisphere),Freesurfer DKT,frontal,left
+27192,Mean thickness of pericalcarine (left hemisphere),Freesurfer DKT,parietal,left
+27193,Mean thickness of postcentral (left hemisphere),Freesurfer DKT,parietal,left
+27194,Mean thickness of posteriorcingulate (left hemisphere),Freesurfer DKT,cingulate   ,left
+27195,Mean thickness of precentral (left hemisphere),Freesurfer DKT,precentral,left
+27196,Mean thickness of precuneus (left hemisphere),Freesurfer DKT,occipital,left
+27197,Mean thickness of rostralanteriorcingulate (left hemisphere),Freesurfer DKT,cingulate   ,left
+27198,Mean thickness of rostralmiddlefrontal (left hemisphere),Freesurfer DKT,frontal,left
+27199,Mean thickness of superiorfrontal (left hemisphere),Freesurfer DKT,frontal,left
+27200,Mean thickness of superiorparietal (left hemisphere),Freesurfer DKT,parietal,left
+27201,Mean thickness of superiortemporal (left hemisphere),Freesurfer DKT,temporal,left
+27202,Mean thickness of supramarginal (left hemisphere),Freesurfer DKT,parietal,left
+27203,Mean thickness of transversetemporal (left hemisphere),Freesurfer DKT,temporal,left
+27204,Mean thickness of insula (left hemisphere),Freesurfer DKT,insula,left
+27205,Volume of caudalanteriorcingulate (left hemisphere),Freesurfer DKT,cingulate   ,left
+27206,Volume of caudalmiddlefrontal (left hemisphere),Freesurfer DKT,frontal,left
+27207,Volume of cuneus (left hemisphere),Freesurfer DKT,occipital,left
+27208,Volume of entorhinal (left hemisphere),Freesurfer DKT,temporal,left
+27209,Volume of fusiform (left hemisphere),Freesurfer DKT,fusiform,left
+27210,Volume of inferiorparietal (left hemisphere),Freesurfer DKT,parietal,left
+27211,Volume of inferiortemporal (left hemisphere),Freesurfer DKT,temporal,left
+27212,Volume of isthmuscingulate (left hemisphere),Freesurfer DKT,cingulate   ,left
+27213,Volume of lateraloccipital (left hemisphere),Freesurfer DKT,occipital,left
+27214,Volume of lateralorbitofrontal (left hemisphere),Freesurfer DKT,frontal,left
+27215,Volume of lingual (left hemisphere),Freesurfer DKT,occipital,left
+27216,Volume of medialorbitofrontal (left hemisphere),Freesurfer DKT,frontal,left
+27217,Volume of middletemporal (left hemisphere),Freesurfer DKT,temporal,left
+27218,Volume of parahippocampal (left hemisphere),Freesurfer DKT,parahippocampal,left
+27219,Volume of paracentral (left hemisphere),Freesurfer DKT,paracentral,left
+27220,Volume of parsopercularis (left hemisphere),Freesurfer DKT,frontal,left
+27221,Volume of parsorbitalis (left hemisphere),Freesurfer DKT,frontal,left
+27222,Volume of parstriangularis (left hemisphere),Freesurfer DKT,frontal,left
+27223,Volume of pericalcarine (left hemisphere),Freesurfer DKT,parietal,left
+27224,Volume of postcentral (left hemisphere),Freesurfer DKT,parietal,left
+27225,Volume of posteriorcingulate (left hemisphere),Freesurfer DKT,cingulate   ,left
+27226,Volume of precentral (left hemisphere),Freesurfer DKT,precentral,left
+27227,Volume of precuneus (left hemisphere),Freesurfer DKT,occipital,left
+27228,Volume of rostralanteriorcingulate (left hemisphere),Freesurfer DKT,cingulate   ,left
+27229,Volume of rostralmiddlefrontal (left hemisphere),Freesurfer DKT,frontal,left
+27230,Volume of superiorfrontal (left hemisphere),Freesurfer DKT,frontal,left
+27231,Volume of superiorparietal (left hemisphere),Freesurfer DKT,parietal,left
+27232,Volume of superiortemporal (left hemisphere),Freesurfer DKT,temporal,left
+27233,Volume of supramarginal (left hemisphere),Freesurfer DKT,parietal,left
+27234,Volume of transversetemporal (left hemisphere),Freesurfer DKT,temporal,left
+27235,Volume of insula (left hemisphere),Freesurfer DKT,insula,left
+27236,Area of caudalanteriorcingulate (right hemisphere),Freesurfer DKT,cingulate   ,right
+27237,Area of caudalmiddlefrontal (right hemisphere),Freesurfer DKT,frontal,right
+27238,Area of cuneus (right hemisphere),Freesurfer DKT,occipital,right
+27239,Area of entorhinal (right hemisphere),Freesurfer DKT,temporal,right
+27240,Area of fusiform (right hemisphere),Freesurfer DKT,fusiform,right
+27241,Area of inferiorparietal (right hemisphere),Freesurfer DKT,parietal,right
+27242,Area of inferiortemporal (right hemisphere),Freesurfer DKT,temporal,right
+27243,Area of isthmuscingulate (right hemisphere),Freesurfer DKT,cingulate   ,right
+27244,Area of lateraloccipital (right hemisphere),Freesurfer DKT,occipital,right
+27245,Area of lateralorbitofrontal (right hemisphere),Freesurfer DKT,frontal,right
+27246,Area of lingual (right hemisphere),Freesurfer DKT,occipital,right
+27247,Area of medialorbitofrontal (right hemisphere),Freesurfer DKT,frontal,right
+27248,Area of middletemporal (right hemisphere),Freesurfer DKT,temporal,right
+27249,Area of parahippocampal (right hemisphere),Freesurfer DKT,parahippocampal,right
+27250,Area of paracentral (right hemisphere),Freesurfer DKT,paracentral,right
+27251,Area of parsopercularis (right hemisphere),Freesurfer DKT,frontal,right
+27252,Area of parsorbitalis (right hemisphere),Freesurfer DKT,frontal,right
+27253,Area of parstriangularis (right hemisphere),Freesurfer DKT,frontal,right
+27254,Area of pericalcarine (right hemisphere),Freesurfer DKT,parietal,right
+27255,Area of postcentral (right hemisphere),Freesurfer DKT,parietal,right
+27256,Area of posteriorcingulate (right hemisphere),Freesurfer DKT,cingulate   ,right
+27257,Area of precentral (right hemisphere),Freesurfer DKT,precentral,right
+27258,Area of precuneus (right hemisphere),Freesurfer DKT,occipital,right
+27259,Area of rostralanteriorcingulate (right hemisphere),Freesurfer DKT,cingulate   ,right
+27260,Area of rostralmiddlefrontal (right hemisphere),Freesurfer DKT,frontal,right
+27261,Area of superiorfrontal (right hemisphere),Freesurfer DKT,frontal,right
+27262,Area of superiorparietal (right hemisphere),Freesurfer DKT,parietal,right
+27263,Area of superiortemporal (right hemisphere),Freesurfer DKT,temporal,right
+27264,Area of supramarginal (right hemisphere),Freesurfer DKT,parietal,right
+27265,Area of transversetemporal (right hemisphere),Freesurfer DKT,temporal,right
+27266,Area of insula (right hemisphere),Freesurfer DKT,insula,right
+27267,Mean thickness of caudalanteriorcingulate (right hemisphere),Freesurfer DKT,cingulate   ,right
+27268,Mean thickness of caudalmiddlefrontal (right hemisphere),Freesurfer DKT,frontal,right
+27269,Mean thickness of cuneus (right hemisphere),Freesurfer DKT,occipital,right
+27270,Mean thickness of entorhinal (right hemisphere),Freesurfer DKT,temporal,right
+27271,Mean thickness of fusiform (right hemisphere),Freesurfer DKT,fusiform,right
+27272,Mean thickness of inferiorparietal (right hemisphere),Freesurfer DKT,parietal,right
+27273,Mean thickness of inferiortemporal (right hemisphere),Freesurfer DKT,temporal,right
+27274,Mean thickness of isthmuscingulate (right hemisphere),Freesurfer DKT,cingulate   ,right
+27275,Mean thickness of lateraloccipital (right hemisphere),Freesurfer DKT,occipital,right
+27276,Mean thickness of lateralorbitofrontal (right hemisphere),Freesurfer DKT,frontal,right
+27277,Mean thickness of lingual (right hemisphere),Freesurfer DKT,occipital,right
+27278,Mean thickness of medialorbitofrontal (right hemisphere),Freesurfer DKT,frontal,right
+27279,Mean thickness of middletemporal (right hemisphere),Freesurfer DKT,temporal,right
+27280,Mean thickness of parahippocampal (right hemisphere),Freesurfer DKT,parahippocampal,right
+27281,Mean thickness of paracentral (right hemisphere),Freesurfer DKT,paracentral,right
+27282,Mean thickness of parsopercularis (right hemisphere),Freesurfer DKT,frontal,right
+27283,Mean thickness of parsorbitalis (right hemisphere),Freesurfer DKT,frontal,right
+27284,Mean thickness of parstriangularis (right hemisphere),Freesurfer DKT,frontal,right
+27285,Mean thickness of pericalcarine (right hemisphere),Freesurfer DKT,parietal,right
+27286,Mean thickness of postcentral (right hemisphere),Freesurfer DKT,parietal,right
+27287,Mean thickness of posteriorcingulate (right hemisphere),Freesurfer DKT,cingulate   ,right
+27288,Mean thickness of precentral (right hemisphere),Freesurfer DKT,precentral,right
+27289,Mean thickness of precuneus (right hemisphere),Freesurfer DKT,occipital,right
+27290,Mean thickness of rostralanteriorcingulate (right hemisphere),Freesurfer DKT,cingulate   ,right
+27291,Mean thickness of rostralmiddlefrontal (right hemisphere),Freesurfer DKT,frontal,right
+27292,Mean thickness of superiorfrontal (right hemisphere),Freesurfer DKT,frontal,right
+27293,Mean thickness of superiorparietal (right hemisphere),Freesurfer DKT,parietal,right
+27294,Mean thickness of superiortemporal (right hemisphere),Freesurfer DKT,temporal,right
+27295,Mean thickness of supramarginal (right hemisphere),Freesurfer DKT,parietal,right
+27296,Mean thickness of transversetemporal (right hemisphere),Freesurfer DKT,temporal,right
+27297,Mean thickness of insula (right hemisphere),Freesurfer DKT,insula,right
+27298,Volume of caudalanteriorcingulate (right hemisphere),Freesurfer DKT,cingulate   ,right
+27299,Volume of caudalmiddlefrontal (right hemisphere),Freesurfer DKT,frontal,right
+27300,Volume of cuneus (right hemisphere),Freesurfer DKT,occipital,right
+27301,Volume of entorhinal (right hemisphere),Freesurfer DKT,temporal,right
+27302,Volume of fusiform (right hemisphere),Freesurfer DKT,fusiform,right
+27303,Volume of inferiorparietal (right hemisphere),Freesurfer DKT,parietal,right
+27304,Volume of inferiortemporal (right hemisphere),Freesurfer DKT,temporal,right
+27305,Volume of isthmuscingulate (right hemisphere),Freesurfer DKT,cingulate   ,right
+27306,Volume of lateraloccipital (right hemisphere),Freesurfer DKT,occipital,right
+27307,Volume of lateralorbitofrontal (right hemisphere),Freesurfer DKT,frontal,right
+27308,Volume of lingual (right hemisphere),Freesurfer DKT,occipital,right
+27309,Volume of medialorbitofrontal (right hemisphere),Freesurfer DKT,frontal,right
+27310,Volume of middletemporal (right hemisphere),Freesurfer DKT,temporal,right
+27311,Volume of parahippocampal (right hemisphere),Freesurfer DKT,hippocampus,right
+27312,Volume of paracentral (right hemisphere),Freesurfer DKT,paracentral,right
+27313,Volume of parsopercularis (right hemisphere),Freesurfer DKT,frontal,right
+27314,Volume of parsorbitalis (right hemisphere),Freesurfer DKT,frontal,right
+27315,Volume of parstriangularis (right hemisphere),Freesurfer DKT,frontal,right
+27316,Volume of pericalcarine (right hemisphere),Freesurfer DKT,parietal,right
+27317,Volume of postcentral (right hemisphere),Freesurfer DKT,parietal,right
+27318,Volume of posteriorcingulate (right hemisphere),Freesurfer DKT,cingulate   ,right
+27319,Volume of precentral (right hemisphere),Freesurfer DKT,precentral,right
+27320,Volume of precuneus (right hemisphere),Freesurfer DKT,occipital,right
+27321,Volume of rostralanteriorcingulate (right hemisphere),Freesurfer DKT,cingulate   ,right
+27322,Volume of rostralmiddlefrontal (right hemisphere),Freesurfer DKT,frontal,right
+27323,Volume of superiorfrontal (right hemisphere),Freesurfer DKT,frontal,right
+27324,Volume of superiorparietal (right hemisphere),Freesurfer DKT,parietal,right
+27325,Volume of superiortemporal (right hemisphere),Freesurfer DKT,temporal,right
+27326,Volume of supramarginal (right hemisphere),Freesurfer DKT,parietal,right
+27327,Volume of transversetemporal (right hemisphere),Freesurfer DKT,temporal,right
+27328,Volume of insula (right hemisphere),Freesurfer DKT,insula,right

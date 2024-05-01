@@ -1,0 +1,102 @@
+---
+title: "Pipeline step 6 genetic principal components"
+---
+
+
+9/29/22 Added the genetic PCs to the pipeline for inclusion as regression covariates. The first 40 are calculated and provided by the UK Biobank in data field 22009 "Genetic principal components". Based on an email conversation with Alex Hatoum we decided to include 10 of the PCs since this is generally enough in a European population.
+These PCs are calculated on a majority European population so we have to further filter on Ethnicity in step 1 to ensure they are valid.
+
+```{r}
+library(dplyr) # Run install.packages("tidyverse") to get this
+library(tidyr) # Run install.packages("tidyr") to get this
+library(ggplot2)
+library("reshape") # Run install.packages("reshape") to get this
+library(kableExtra) # Run install.packages("kableExtra")
+
+```
+
+
+Set the filepath to get input files
+```{r}
+# Home computer
+input_path <- "file_path"
+
+```
+
+Set the filepath to save outputs to
+```{r}
+# Home computer
+output_path <- "file_path"
+
+```
+
+Set the date the IDP names table script was run
+```{r}
+
+run_date <- "yyyy-mm-dd"
+
+```
+
+
+Load the PCs
+```{r}
+
+genetic_PC <- read.csv(paste0(input_path, "ukb_pc20.csv"))
+
+```
+
+```{r}
+
+load(paste0(output_path, "filtered_eid_p2_", run_date, ".RData"))
+
+genetic_PC <- genetic_PC %>%
+  filter(genetic_PC$n_eid %in% filtered_eid)
+
+```
+
+
+Select the first 10
+```{r}
+
+genetic_PC <- genetic_PC[,1:11]
+
+```
+
+Rename the columns so they are more readable
+```{r}
+
+genetic_PC <- genetic_PC %>%
+  rename_with(~ gsub("n_22009_0_", "", .x)) %>%
+  rename_with(~ paste0("PC_", .x)) %>%
+  # Fix n_eid, it is not a PC
+  dplyr::rename("n_eid" = PC_n_eid)
+
+head(genetic_PC)
+
+```
+
+Remove any rows that are missing genetic components
+
+```{r}
+
+print(paste0("Before: ", nrow(genetic_PC)))
+n_before <- nrow(genetic_PC)
+
+genetic_PC <- na.omit(genetic_PC)
+
+print(paste0("After: ", nrow(genetic_PC)))
+print(paste0((n_before - nrow(genetic_PC)), " participants dropped for missing genetic PCs"))
+
+```
+
+Save the genetic PCs and a list of the IDs which have PCs
+```{r}
+
+genetic_PC_eid <- genetic_PC$n_eid
+
+save(genetic_PC_eid, file = paste0(output_path, "genetic_PC_eid_", Sys.Date(), ".RData"))
+
+save(genetic_PC, file = paste0(output_path, "genetic_PC_", Sys.Date(), ".RData"))
+
+```
+
