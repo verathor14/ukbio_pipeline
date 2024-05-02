@@ -33,7 +33,7 @@ output_path <- "file_path"
 
 ```
 
-Set the date the IDP names table script was run
+Set the date the pipeline is being run
 ```{r}
 
 run_date <- "yyyy-mm-dd"

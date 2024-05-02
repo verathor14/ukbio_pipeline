@@ -4,7 +4,6 @@ title: "Pipeline step 6 genetic principal components"
 
 
 9/29/22 Added the genetic PCs to the pipeline for inclusion as regression covariates. The first 40 are calculated and provided by the UK Biobank in data field 22009 "Genetic principal components". Based on an email conversation with Alex Hatoum we decided to include 10 of the PCs since this is generally enough in a European population.
-These PCs are calculated on a majority European population so we have to further filter on Ethnicity in step 1 to ensure they are valid.
 
 ```{r}
 library(dplyr) # Run install.packages("tidyverse") to get this
@@ -30,7 +29,7 @@ output_path <- "file_path"
 
 ```
 
-Set the date the IDP names table script was run
+Set the date the pipeline is being run
 ```{r}
 
 run_date <- "yyyy-mm-dd"

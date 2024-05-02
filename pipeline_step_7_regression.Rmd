@@ -1,0 +1,387 @@
+---
+title: "Pipeline Step 5: Regression"
+output:
+  html_document:
+    df_print: paged
+---
+
+
+```{r}
+library(dplyr) # Run install.packages("tidyverse") to get this
+library(tidyr) # Run install.packages("tidyr") to get this
+library(ggplot2)
+library("reshape") # Run install.packages("reshape") to get this
+library("broom")
+```
+
+
+Set the filepath to get input files
+```{r}
+# Home computer
+input_path <- "file_path"
+
+```
+
+Set the filepath to save outputs to
+```{r}
+# Home computer
+output_path <- "file_path"
+
+```
+
+Set the date the IDP names table script was run
+```{r}
+
+run_date <- "yyyy-mm-dd"
+
+```
+
+
+Load the IDP names table to stitch in after regression is done
+From step 0 of the pipeline
+
+```{r}
+
+load(paste0(output_path, "IDP_names_table_", run_date, ".RData"))
+
+```
+
+Load then filter the genetic PCs
+```{r}
+
+load(paste0(output_path, "filtered_eid_p2_", run_date, ".RData"))
+load(paste0(output_path, "genetic_PC_", run_date, ".RData"))
+
+genetic_PC <- genetic_PC %>%
+  filter(n_eid %in% filtered_eid)
+
+```
+
+Load the processed imaging covariates
+From step 2 of the pipeline
+```{r}
+
+load(paste0(output_path, "/processed_imaging_covariates_", run_date, ".RData"))
+
+```
+
+Load the covariates that have been processed with backfilling imaging data with baseline data and then imputation
+From step 3 of the pipeline
+```{r}
+
+load(paste0(output_path, "/imputed_covariates_", run_date, ".RData"))
+
+```
+
+Combine the tables to make a regression table
+```{r}
+
+regression_table <- imputation_results %>%
+  left_join(genetic_PC, by = "n_eid") %>%
+  left_join(processed_covariates, by = "n_eid")
+  
+rm(imputation_results)
+rm(processed_covariates)
+rm(genetic_PC)
+gc()
+
+```
+
+
+Define a function for regression (will run on all the different sets of IDPs)
+
+```{r}
+
+
+do_IDP_regression <- function(IDP_table, vars_list, regression_table) {
+  # Function to perform regression using covariates in the regression table on all the IDPs in the supplied IDP table
+  # Will return a table with IDP, alcohol estimate and P value, and pack years estimate and P value
+  
+  # Join the IDPs onto the regression table
+  # Changed this to inner join, R has been sneakily dropping my n the WHOLE time
+  regression_table <- inner_join(IDP_table, regression_table, by = "n_eid", all = FALSE)
+  regression_table <- na.omit(regression_table)
+  # Print the N so user is alerted if this happens
+  print(paste0("IDP N=", nrow(IDP_table), ", regression N=", nrow(regression_table)))
+  
+  IDP_names <- colnames(IDP_table)
+  IDP_names <- IDP_names[IDP_names != "n_eid"]
+  
+  regression <- lapply(IDP_names, function(x) glm(formula(paste("unlist(regression_table[,x]) ~",
+                                             paste(vars_list, collapse = "+"))),
+                                              family = "gaussian", data = regression_table))
+  regression <- lapply(regression, tidy)
+  
+  regression_results <- data.frame("alcohol_beta" = c(), "alcohol_p" = c())
+
+  for (n in 1:length(regression)) {
+    
+    IDP <- IDP_names[n]
+    summary_tibble <- regression[[n]]
+    
+    summary_tibble <- summary_tibble %>%
+      mutate(term = gsub("\\(", "", term)) %>%
+      mutate(term = gsub("\\)", "", term)) %>%
+      mutate(term = tolower(term)) %>%
+      select(term, estimate, std.error, p.value) %>%
+      pivot_longer(cols = c(estimate, std.error, p.value), names_to = "stat", values_to = "value")
+    
+    summary_tibble <- summary_tibble %>%
+      mutate(col_name = case_when(
+      (stat == "estimate") ~ paste0(term, "_beta"),
+      (stat == "std.error") ~ paste0(term, "_se"),
+      (stat == "p.value") ~ paste0(term, "_p"))) %>%
+      select(col_name, value) %>%
+      pivot_wider(names_from = col_name, values_from = value)
+    
+    new_row <- data.frame("IDP" = IDP)
+    
+    new_row <- cbind(new_row, summary_tibble)
+    
+    
+    regression_results <- rbind(regression_results, new_row)
+    
+  }
+  
+
+  return(regression_results)
+}
+
+
+```
+
+Set up the lists of variables
+
+```{r}
+
+imaging_covariates <- c("site", "site1_sex", "site1_age", "site1_age_2", "site1_date", "site1_date_2", "site1_head_size",
+                        "site1_rfMRI_motion", "site1_age_sex", "site2_sex", "site2_age", "site2_age_2", "site2_date",
+                        "site2_date_2", "site2_head_size", "site2_rfMRI_motion", "site2_age_sex", "site3_sex", "site3_age",
+                        "site3_age_2", "site3_date", "site3_date_2", "site3_head_size", "site3_rfMRI_motion", "site3_age_sex")
+
+genetic_covariates <- c("PC_1", "PC_2", "PC_3", "PC_4", "PC_5", "PC_6", "PC_7", "PC_8", "PC_9", "PC_10")
+
+covariates <-c("diastolic_BP", "systolic_BP", "BMI", "income", "education_years", "stress", "moderate", "vigorous", "diabetes",
+               "vascular_heart", "cancer", "other_diagnosis")
+
+
+```
+
+Set predictors for the total volumes, we want to use the NON-scaled week drinks and pack years to make the results more interperable
+Note that the total volumes also were not scaled in pipeline step 1
+```{r}
+
+predictors <- c("week_drinks", "pack_years")
+
+```
+
+
+Load IDPs and perform regression
+
+```{r}
+
+load(paste0(output_path, "total_volumes_", run_date, ".RData"))
+
+all_IDP_results <- do_IDP_regression(total_volumes, c(predictors, covariates, genetic_covariates, imaging_covariates), regression_table)
+
+```
+
+Load the control measures (selected / created during pipeline step 1) and add them to the regression table
+Need to do this after running the total volumes, because some total volumes are also in the controls!
+```{r}
+
+control_measures <- read.csv(paste0(output_path, "controls_", run_date, ".csv"))
+#load(paste0(output_path, "/controls_", run_date, ".RData"))
+
+regression_table <- regression_table %>%
+  left_join(control_measures, by = "n_eid")
+
+```
+
+#######################################################
+Set the predictors for this set of regression analyses
+Now use normalized measures for better regression
+```{r}
+
+predictors <- c("scaled_week_drinks", "scaled_pack_years")
+
+```
+#######################################################
+
+
+Run on regional IDP measures
+```{r}
+
+load(paste0(output_path, "GMV_", run_date, ".RData"))
+
+control <- c("X25009.2.0")
+
+GMV_results <- do_IDP_regression(GMV, c(predictors, control, covariates, genetic_covariates, imaging_covariates), regression_table)
+
+all_IDP_results <- bind_rows(all_IDP_results, GMV_results)
+
+rm(GMV)
+rm(GMV_results)
+gc()
+
+```
+
+```{r}
+
+load(paste0(output_path, "T2_", run_date, ".RData"))
+
+control <- c("X25009.2.0")
+
+T2_results <- do_IDP_regression(T2, c(predictors, control, covariates, genetic_covariates, imaging_covariates), regression_table)
+
+all_IDP_results <- bind_rows(all_IDP_results, T2_results)
+
+rm(T2)
+rm(T2_results)
+gc()
+
+
+```
+
+T1 regional IDPs include Freesurfer aseg (controlled with aseg volume, 26514) and Freesurfer DKT. DKT area and volume are also controlled with aseg volume, however, DKT thickness is controlled with global mean thickness.
+
+Load the IDPs and then divide into groups for analysis with the correct control
+```{r}
+
+load(paste0(output_path, "T1_regional_", run_date, ".RData"))
+
+```
+
+
+```{r}
+
+DKT_thickness_IDPs <- IDP_name_table %>%
+  filter(map == "freesurfer_DKT") %>%
+  filter(dimension == "thickness") %>%
+  pull(IDP)
+
+```
+
+```{r}
+
+DKT_thickness <- T1_regional %>%
+  select(c(n_eid, all_of(DKT_thickness_IDPs)))
+
+T1_regional <- T1_regional %>%
+  select(-all_of(DKT_thickness_IDPs))
+
+```
+
+
+
+```{r}
+
+control <- c("X26541.2.0") # Control with total volume from aseg
+
+T1_results <- do_IDP_regression(T1_regional, c(predictors, control, covariates, genetic_covariates, imaging_covariates),
+                                regression_table)
+
+all_IDP_results <- bind_rows(all_IDP_results, T1_results)
+
+rm(T1_regional)
+rm(T1_results)
+gc()
+
+
+```
+
+Regression Freesurfer DKT thickness, controlling with global mean thickness
+```{r}
+
+control <- c("global_mean_thk") # Control with global mean thickness
+
+DKT_thickness_results <- do_IDP_regression(DKT_thickness, c(predictors, control, covariates, genetic_covariates, imaging_covariates),
+                                regression_table)
+
+all_IDP_results <- bind_rows(all_IDP_results, DKT_thickness_results)
+
+rm(DKT_thickness)
+rm(DKT_thickness_results)
+gc()
+
+```
+
+I do not currently have the Freesurfer 2009a or desikan IDPs in this script, we are not currently using them
+
+
+```{r}
+
+load(paste0(output_path, "rfMRI_", run_date, ".RData"))
+
+# No control for rfMRI
+
+rfMRI_results <- do_IDP_regression(rfMRI, c(predictors, covariates, genetic_covariates, imaging_covariates),
+                                regression_table)
+
+all_IDP_results <- bind_rows(all_IDP_results, rfMRI_results)
+
+rm(rfMRI)
+rm(rfMRI_results)
+gc()
+
+
+```
+
+Load the dMRI IDPs and run regression, will filter for FA, MD, ICVF, ISOVF later
+NOT controlling for the overall average trend in this set
+```{r}
+
+load(paste0(output_path, "dMRI_", run_date, ".RData"))
+
+dMRI_results <- do_IDP_regression(dMRI, c(predictors, covariates, genetic_covariates, imaging_covariates),
+                                regression_table)
+
+all_IDP_results <- bind_rows(all_IDP_results, dMRI_results)
+
+rm(dMRI)
+rm(dMRI_results)
+gc()
+
+
+```
+
+
+Get the columns which are p values
+```{r}
+
+p_values <- colnames(all_IDP_results)[grepl("_p", colnames(all_IDP_results))]
+
+p_values <- p_values[! p_values %in% c("scaled_pack_years_se", "scaled_pack_years_beta")]
+
+# Check that nothing is getting included that shouldn't be
+p_values
+
+```
+
+
+Using FDR correction with the p.adjust function from the stats library
+```{r}
+
+adjusted <- all_IDP_results %>%
+  mutate_at(paste(p_values), ~p.adjust(.x, method = "fdr", n = nrow(all_IDP_results)))
+
+```
+
+4/25/24 checked this and it is adjusting the p values. n = nrow(all_IDP_results) is important because week drinks and pack years have some scaled and others not
+
+
+Bind the expanded IDP information to the tables
+```{r}
+
+all_IDP_results <- left_join(all_IDP_results, IDP_name_table, by = "IDP")
+
+```
+
+Save the regression results
+```{r}
+
+save(all_IDP_results, file = paste0(output_path, "regression_results_", Sys.Date(), ".RData"))
+
+
+```
+
